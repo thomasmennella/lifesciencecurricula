@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WNE Course Prerequisite Maps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f6f2;
+  --surface: #ffffff;
+  --border: rgba(0,0,0,0.09);
+  --border-med: rgba(0,0,0,0.16);
+  --text: #1a1916;
+  --text-2: #6b6860;
+  --text-3: #9c9a92;
+  --bio: #5b50c8;
+  --chem: #2b7fd4;
+  --hs: #a66810;
+  --hst: #178c60;
+  --accent: #d4501a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 40px 48px 36px;
+}
+.header-eyebrow {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 10px;
+}
+header h1 {
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+header p {
+  font-size: 14px;
+  color: var(--text-2);
+  max-width: 560px;
+  line-height: 1.6;
+}
+
+/* ── Main ── */
+main {
+  flex: 1;
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 48px 48px 80px;
+}
+
+/* ── Section label ── */
+.section-label {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Cards ── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin-bottom: 56px;
+}
+
+a.prog-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px 24px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .15s, box-shadow .15s, transform .12s;
+  position: relative;
+  overflow: hidden;
+}
+a.prog-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 12px 12px 0 0;
+}
+a.prog-card.bio::before   { background: var(--bio); }
+a.prog-card.hsci::before  { background: var(--hs); }
+a.prog-card.hst::before   { background: var(--hst); }
+
+a.prog-card:hover {
+  border-color: var(--border-med);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+.card-tag {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 20px;
+  width: fit-content;
+  margin-bottom: 14px;
+}
+.bio  .card-tag { background: #eeedfe; color: #3c3489; }
+.hsci .card-tag { background: #faeeda; color: #633806; }
+.hst  .card-tag { background: #e1f5ee; color: #085041; }
+
+.card-title {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.card-sub {
+  font-size: 12px;
+  color: var(--text-3);
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 12px;
+}
+.card-desc {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.55;
+  flex: 1;
+}
+.card-arrow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 18px;
+  color: var(--text-3);
+  transition: color .15s, gap .15s;
+}
+a.prog-card:hover .card-arrow {
+  color: var(--text);
+  gap: 8px;
+}
+.card-arrow svg { flex-shrink: 0; }
+
+/* ── How to use ── */
+.how-to {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+}
+.how-to h2 {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 14px;
+  color: var(--text);
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+.step {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+}
+.step-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--border-med);
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.step p {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+/* ── Footer ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 20px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+footer p {
+  font-size: 11px;
+  color: var(--text-3);
+  font-family: 'DM Mono', monospace;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">Western New England University · College of Arts &amp; Sciences</div>
+  <h1>Course Prerequisite Maps</h1>
+  <p>Interactive four-year course sequence guides for the Physical &amp; Biological Sciences programs. Click any course card to see prerequisites, corequisites, and what each course unlocks.</p>
+</header>
+
+<main>
+
+  <div class="section-label">Programs</div>
+
+  <div class="cards">
+
+    <a href="bio_flowchart.html" class="prog-card bio">
+      <span class="card-tag">BIO.BS</span>
+      <div class="card-title">BS in Biology</div>
+      <div class="card-sub">120 cr · 4 years</div>
+      <div class="card-desc">Cell biology, genetics, ecology, and evolution. Includes calculus-based physics options and a 7-credit upper-level biology elective requirement.</div>
+      <div class="card-arrow">
+        View course map
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </a>
+
+    <a href="hsci_flowchart.html" class="prog-card hsci">
+      <span class="card-tag">HS.BS</span>
+      <div class="card-title">BS in Health Sciences</div>
+      <div class="card-sub">120 cr · 4 years</div>
+      <div class="card-desc">Anatomy &amp; physiology, organic chemistry, biochemistry, and psychology. Designed for students pursuing pre-med, pre-dental, pre-pharmacy, or allied health careers.</div>
+      <div class="card-arrow">
+        View course map
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </a>
+
+    <a href="hst_flowchart.html" class="prog-card hst">
+      <span class="card-tag">HST.BS</span>
+      <div class="card-title">BS in Health Studies</div>
+      <div class="card-sub">120 cr · 4 years</div>
+      <div class="card-desc">Social, psychological, and public health perspectives on healthcare. Designed for students pursuing occupational therapy, physical therapy, public health, nursing, or patient advocacy.</div>
+      <div class="card-arrow">
+        View course map
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-label">How to use these maps</div>
+
+  <div class="how-to">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <p>Select a program above to open its four-year course sequence.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <p>Click any course card to expand it and see its prerequisites, corequisites, and which courses it unlocks.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <p>Linked chips inside expanded panels are clickable — follow the chain forward or backward.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <p>Tags on each card show fall/spring availability, WIC status, and prerequisite bottlenecks.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <p>Scroll to the bottom of each map for critical path notes and advising guidance.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>AY 2025–26 · Western New England University Catalog</p>
+  <p>Physical &amp; Biological Sciences · College of Arts &amp; Sciences</p>
+</footer>
+
+</body>
+</html>
