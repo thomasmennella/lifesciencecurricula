@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BS Health Studies — Course Prerequisite Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f6f2;
+  --surface: #ffffff;
+  --surface2: #f0efe9;
+  --border: rgba(0,0,0,0.09);
+  --border-med: rgba(0,0,0,0.16);
+  --text: #1a1916;
+  --text-2: #6b6860;
+  --text-3: #9c9a92;
+  --bio: #5b50c8;
+  --chem: #2b7fd4;
+  --phys: #178c60;
+  --psy: #558a1a;
+  --hs: #a66810;
+  --comm: #8b3a8b;
+  --gen: #7a7870;
+  --warn-bg: #fcebeb;
+  --warn-border: #f09595;
+  --warn-text: #791f1f;
+  --cap-bg: #faece7;
+  --cap-text: #712b13;
+  --wic-bg: #fbeaf0;
+  --wic-text: #72243e;
+  --fall-bg: #eeedfe;
+  --fall-text: #3c3489;
+  --spring-bg: #e1f5ee;
+  --spring-text: #085041;
+  --opt-bg: #faeeda;
+  --opt-text: #633806;
+  --accent: #d4501a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; min-height: 100vh; }
+
+.page-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 26px 40px 20px; position: sticky; top: 0; z-index: 100; }
+.page-header h1 { font-size: 17px; font-weight: 500; letter-spacing: -0.01em; }
+.page-header p { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; align-items: center; }
+.meta-item { font-size: 11px; color: var(--text-2); display: flex; align-items: center; gap: 5px; }
+.meta-dot { width: 7px; height: 7px; border-radius: 1.5px; flex-shrink: 0; }
+.meta-sep { width: 1px; height: 14px; background: var(--border-med); }
+.leg-tag { font-size: 10px; font-family: 'DM Mono', monospace; padding: 1px 5px; border-radius: 3px; font-weight: 500; }
+
+.main { max-width: 900px; margin: 0 auto; padding: 36px 40px 80px; }
+
+.yr-wrap { margin-bottom: 40px; }
+.yr-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.yr-label { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); font-family: 'DM Mono', monospace; }
+.yr-line { flex: 1; height: 1px; background: var(--border); }
+
+.sem { margin-bottom: 20px; }
+.sem-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.sem-title { font-size: 12px; font-weight: 500; color: var(--text-2); }
+.sem-cr { font-size: 11px; color: var(--text-3); font-family: 'DM Mono', monospace; }
+.sem-badge { font-size: 10px; font-weight: 500; font-family: 'DM Mono', monospace; padding: 2px 7px; border-radius: 20px; }
+.fall-badge { background: var(--fall-bg); color: var(--fall-text); }
+.spring-badge { background: var(--spring-bg); color: var(--spring-text); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 7px; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 11px 10px 0; cursor: pointer; transition: border-color .12s, box-shadow .12s; display: flex; user-select: none; }
+.card:hover { border-color: var(--border-med); box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.card.active { border-color: rgba(0,0,0,0.25); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+.card-stripe { width: 3px; border-radius: 0 2px 2px 0; flex-shrink: 0; margin-right: 9px; align-self: stretch; min-height: 52px; }
+.card-body { flex: 1; min-width: 0; }
+.card-code { font-size: 12px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--text); margin-bottom: 2px; }
+.card-name { font-size: 11px; color: var(--text-2); margin-bottom: 6px; line-height: 1.3; }
+.tags { display: flex; flex-wrap: wrap; gap: 3px; }
+.tag { font-size: 9px; font-family: 'DM Mono', monospace; font-weight: 500; padding: 1px 5px; border-radius: 3px; white-space: nowrap; }
+.tag-cr   { background: #f1efe8; color: #5f5e5a; }
+.tag-fo   { background: var(--fall-bg); color: var(--fall-text); }
+.tag-so   { background: var(--spring-bg); color: var(--spring-text); }
+.tag-wic  { background: var(--wic-bg); color: var(--wic-text); }
+.tag-cap  { background: var(--cap-bg); color: var(--cap-text); }
+.tag-warn { background: var(--warn-bg); color: var(--warn-text); border: 1px solid var(--warn-border); }
+.tag-opt  { background: var(--opt-bg); color: var(--opt-text); }
+.tag-req  { background: #eeedfe; color: #3c3489; }
+
+.panel { background: var(--surface); border: 1px solid var(--border-med); border-radius: 10px; padding: 14px 16px; margin-top: 8px; display: none; animation: slideDown .15s ease; }
+.panel.show { display: block; }
+@keyframes slideDown { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+.panel-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.panel-meta { font-size: 11px; color: var(--text-3); font-family: 'DM Mono', monospace; margin-bottom: 10px; }
+.panel-desc { font-size: 12px; color: var(--text-2); line-height: 1.55; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.panel-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 7px; flex-wrap: wrap; }
+.panel-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; padding-top: 3px; flex-shrink: 0; min-width: 56px; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip { font-size: 11px; font-family: 'DM Mono', monospace; padding: 2px 8px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border-med); color: var(--text); cursor: pointer; transition: background .1s; white-space: nowrap; }
+.chip:hover { background: #eeedfe; }
+.chip.co { border-style: dashed; background: transparent; }
+.chip.co:hover { background: var(--surface2); }
+.chip.nc { cursor: default; }
+.chip.nc:hover { background: var(--surface2); }
+.panel-note { font-size: 11px; color: var(--text-3); margin-top: 8px; line-height: 1.5; font-style: italic; }
+.warn-box { margin-top: 10px; background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: 6px; padding: 8px 11px; font-size: 11px; color: var(--warn-text); line-height: 1.5; }
+.opt-box { margin-top: 10px; background: var(--opt-bg); border: 1px solid #f0c97a; border-radius: 6px; padding: 8px 11px; font-size: 11px; color: var(--opt-text); line-height: 1.5; }
+
+.sec-head { font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); font-family: 'DM Mono', monospace; margin: 36px 0 12px; display: flex; align-items: center; gap: 10px; }
+.sec-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.elec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 7px; margin-top: 10px; }
+.elec-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 10px 0; display: flex; cursor: pointer; transition: border-color .12s; }
+.elec-card:hover { border-color: var(--border-med); }
+.elec-stripe { width: 3px; border-radius: 0 2px 2px 0; flex-shrink: 0; margin-right: 10px; align-self: stretch; min-height: 52px; }
+.elec-code { font-size: 11px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--text); }
+.elec-name { font-size: 11px; color: var(--text-2); margin: 2px 0 3px; line-height: 1.3; }
+.elec-desc { font-size: 10px; color: var(--text-3); line-height: 1.35; margin-bottom: 3px; font-style: italic; }
+.elec-prereq { font-size: 10px; color: var(--text-3); line-height: 1.4; }
+
+.note-list { list-style: none; }
+.note-list li { font-size: 12px; color: var(--text-2); padding: 8px 0 8px 16px; border-bottom: 1px solid var(--border); position: relative; line-height: 1.5; }
+.note-list li::before { content: ''; position: absolute; left: 0; top: 14px; width: 5px; height: 5px; border-radius: 50%; background: var(--border-med); }
+.note-list li.crit { color: var(--warn-text); }
+.note-list li.crit::before { background: var(--accent); }
+.note-list li strong { font-weight: 500; color: var(--text); }
+.note-list li.crit strong { color: var(--warn-text); }
+
+@media print { .page-header { position: static; } .panel { display: block !important; border: none; background: none; padding: 6px 0; } .card { break-inside: avoid; } }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>BS Health Studies — Course Prerequisite Map</h1>
+  <p>Western New England University · AY 2025–26 catalog · Click any card to see prerequisites and what it unlocks</p>
+  <div class="meta">
+    <div class="meta-item"><div class="meta-dot" style="background:var(--bio)"></div>Biology</div>
+    <div class="meta-item"><div class="meta-dot" style="background:var(--chem)"></div>Chemistry</div>
+    <div class="meta-item"><div class="meta-dot" style="background:var(--phys)"></div>Math / Stats</div>
+    <div class="meta-item"><div class="meta-dot" style="background:var(--psy)"></div>Psychology / Ethics</div>
+    <div class="meta-item"><div class="meta-dot" style="background:var(--comm)"></div>Communication</div>
+    <div class="meta-item"><div class="meta-dot" style="background:var(--hs)"></div>HS Elective</div>
+    <div class="meta-item"><div class="meta-dot" style="background:var(--gen)"></div>Gen-ed / other</div>
+    <div class="meta-sep"></div>
+    <div class="meta-item"><span class="leg-tag tag-fo">fall only</span></div>
+    <div class="meta-item"><span class="leg-tag tag-so">spring only</span></div>
+    <div class="meta-item"><span class="leg-tag tag-opt">alt. option</span></div>
+    <div class="meta-item"><span class="leg-tag tag-wic">WIC</span> Writing Intensive</div>
+    <div class="meta-item"><span class="leg-tag tag-cap">capstone</span></div>
+    <div class="meta-item"><span class="leg-tag tag-warn">bottleneck</span></div>
+    <div class="meta-sep"></div>
+    <div class="meta-item">Solid chip = prereq · Dashed chip = corequisite</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════ YEAR 1 ═══════ -->
+<div class="yr-wrap">
+  <div class="yr-head"><span class="yr-label">Year 1</span><div class="yr-line"></div></div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Fall semester</span>
+      <span class="sem-cr">14 cr</span>
+      <span class="sem-badge fall-badge">Fall</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio107')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 107</div><div class="card-name">General Biology I</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('bio117')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 117</div><div class="card-name">Gen Biology Lab I</div><div class="tags"><span class="tag tag-cr">1 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('math1xx')"><div class="card-stripe" style="background:var(--phys)"></div><div class="card-body"><div class="card-code">MATH 1XX</div><div class="card-name">Math placement course</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-opt">alt. option</span></div></div></div>
+      <div class="card" onclick="toggle('engl132')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">ENGL 132</div><div class="card-name">English Comp I</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('blue101')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">BLUE 101</div><div class="card-name">First-Year Seminar</div><div class="tags"><span class="tag tag-cr">1 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gold')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GOLD</div><div class="card-name">GBD Gateway course</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+    </div>
+    <div id="bio107" class="panel"><div class="panel-title">BIO 107 — General Biology I</div><div class="panel-meta">3 cr · Fall only · Required</div><div class="panel-desc">Intended for science majors, this course focuses on introductory cellular and molecular biology. Concepts include cellular biochemistry, metabolism, and genetics.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">1 unit HS chemistry</span></div></div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span><span class="chip" onclick="toggle('bio118');event.stopPropagation()">BIO 118</span></div></div></div>
+    <div id="bio117" class="panel"><div class="panel-title">BIO 117 — General Biology Lab I</div><div class="panel-meta">1 cr · Fall only · Required</div><div class="panel-desc">Students apply scientific thinking and basic technical skills to the study of cells. Methods include microscopy, spectroscopy, and chromatography, as well as data collection and interpretation.</div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span></div></div></div>
+    <div id="math1xx" class="panel"><div class="panel-title">MATH 1XX — Math placement course</div><div class="panel-meta">3 cr · Based on placement</div><div class="panel-desc">Math placement determines starting course. MATH 120 (Intro Statistics for Arts &amp; Sciences) and MATH 121 (Probability &amp; Statistics) both satisfy the statistics requirement; MATH 120 is the more accessible option and does not require calculus.</div><div class="opt-box"><strong>MATH 120</strong> (3 cr) — Intro Statistics for Arts &amp; Sciences. Placement required. Covers descriptive/inferential stats, data visualization, hypothesis testing. Cannot receive credit for both MATH 120 and MATH 121.<br><br><strong>MATH 121</strong> (3 cr) — Introductory Probability &amp; Statistics. Slightly more rigorous alternative. Also satisfies the requirement.</div></div>
+    <div id="engl132" class="panel"><div class="panel-title">ENGL 132 — English Composition I</div><div class="panel-meta">3 cr</div><div class="panel-desc">Foundational academic writing course. Develops research, argumentation, and composition skills.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">Placement</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('engl133');event.stopPropagation()">ENGL 133</span></div></div></div>
+    <div id="blue101" class="panel"><div class="panel-title">BLUE 101 — First-Year Seminar</div><div class="panel-meta">1 cr · First semester only</div><div class="panel-desc">Introductory seminar for first-year students. No prerequisites. Required of all first-semester students.</div></div>
+    <div id="gold" class="panel"><div class="panel-title">GOLD — GBD Gateway course</div><div class="panel-meta">3 cr · First-year only</div><div class="panel-desc">Gateway course for the Golden Bear Discovery trail requirement. No prerequisites. Also satisfies one GBD trail course.</div></div>
+  </div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Spring semester</span>
+      <span class="sem-cr">17 cr</span>
+      <span class="sem-badge spring-badge">Spring</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio108')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 108</div><div class="card-name">General Biology II</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('bio118')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 118</div><div class="card-name">Gen Biology Lab II</div><div class="tags"><span class="tag tag-cr">1 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem105')"><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 105</div><div class="card-name">General Chemistry I</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('engl133')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">ENGL 133</div><div class="card-name">English Comp II</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('comm102')"><div class="card-stripe" style="background:var(--comm)"></div><div class="card-body"><div class="card-code">COMM 102</div><div class="card-name">Intro to Public Speaking</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('gen1sp')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN XXX</div><div class="card-name">General Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+    </div>
+    <div id="bio108" class="panel"><div class="panel-title">BIO 108 — General Biology II</div><div class="panel-meta">3 cr · Spring only · Required</div><div class="panel-desc">Second semester of introductory biology. Focuses on phylogenetic relationships and structural/functional characteristics of the three life domains: Archaea, Bacteria, and Eukarya.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span></div></div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('bio118');event.stopPropagation()">BIO 118</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio215');event.stopPropagation()">BIO 215</span><span class="chip" onclick="toggle('hs325');event.stopPropagation()">HS 325 (elective)</span><span class="chip" onclick="toggle('hs310');event.stopPropagation()">HS 310 (elective)</span><span class="chip" onclick="toggle('hs305');event.stopPropagation()">HS 305 (elective)</span></div></div></div>
+    <div id="bio118" class="panel"><div class="panel-title">BIO 118 — General Biology Lab II</div><div class="panel-meta">1 cr · Spring only · Required</div><div class="panel-desc">Students examine differences between organism types and conduct inquiry-based experiments using an organismal model system. Covers applicable organismal biology terminology.</div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span></div></div></div>
+    <div id="chem105" class="panel"><div class="panel-title">CHEM 105 — General Chemistry I</div><div class="panel-meta">4 cr · Required</div><div class="panel-desc">First course of a two-semester sequence for science majors. Topics include stoichiometry, states of matter, chemical reactions and energy, atomic structure, periodic trends, and chemical bonding. Lab experiments develop basic chemistry skills.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">1 unit HS chemistry</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('chem-y2');event.stopPropagation()">CHEM 106 or CHEM 111 (C− min)</span></div></div></div>
+    <div id="engl133" class="panel"><div class="panel-title">ENGL 133 — English Composition II</div><div class="panel-meta">3 cr</div><div class="panel-desc">Continuation of ENGL 132. Develops advanced academic writing and research skills.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('engl132');event.stopPropagation()">ENGL 132</span></div></div></div>
+    <div id="comm102" class="panel"><div class="panel-title">COMM 102 — Introduction to Public Speaking</div><div class="panel-meta">3 cr · Required</div><div class="panel-desc">Develops students' skills in researching, composing, and presenting speeches, and in adapting principles of public speaking to different situations and contexts.</div><p class="panel-note">No prerequisites listed. Can be taken any semester, but Y1 spring keeps the schedule on track.</p></div>
+    <div id="gen1sp" class="panel"><div class="panel-title">GEN XXX — General Elective</div><div class="panel-meta">3 cr</div><p class="panel-note">No major prerequisites. Consult advisor for GBD trail planning.</p></div>
+  </div>
+</div>
+
+<!-- ═══════ YEAR 2 ═══════ -->
+<div class="yr-wrap">
+  <div class="yr-head"><span class="yr-label">Year 2</span><div class="yr-line"></div></div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Fall semester</span>
+      <span class="sem-cr">14 cr</span>
+      <span class="sem-badge fall-badge">Fall</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('chem-y2')"><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 111 or 106</div><div class="card-name">Chemistry II (choose one)</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-opt">alt. option</span></div></div></div>
+      <div class="card" onclick="toggle('psy101')"><div class="card-stripe" style="background:var(--psy)"></div><div class="card-body"><div class="card-code">PSY 101</div><div class="card-name">Intro Psychology</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('bio215')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 215</div><div class="card-name">Anatomy &amp; Physiology I</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('gbd-y2f')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GBD</div><div class="card-name">Golden Bear Discovery</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+    </div>
+    <div id="chem-y2" class="panel"><div class="panel-title">CHEM 111 or CHEM 106 — Chemistry II</div><div class="panel-meta">4 cr · Fall only (CHEM 111) · Spring only (CHEM 106)</div><div class="panel-desc">Two options satisfy this requirement. CHEM 111 is the standard path for Health Studies; CHEM 106 is the more rigorous option used by Health Sciences and pre-Pharmacy students.</div><div class="opt-box"><strong>CHEM 111</strong> (4 cr, Fall only) — Principles of General, Organic &amp; Biochemistry. The standard Health Studies path. Covers intermolecular forces, organic molecules, solutions, acid-base chemistry, thermodynamics, and kinetics. Prereq: BIO 107 with C− and CHEM 105 with C−. <em>Cannot receive credit for both CHEM 106 and CHEM 111.</em><br><br><strong>CHEM 106</strong> (4 cr, Spring only) — General Chemistry II. More rigorous; required if pursuing Health Sciences or pre-Pharmacy. Prereq: CHEM 105 with C−.</div><div class="panel-row" style="margin-top:10px"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio215');event.stopPropagation()">BIO 215 (concurrent ok)</span><span class="chip" onclick="toggle('hs322');event.stopPropagation()">HS 322 (elective, via CHEM 209)</span></div></div></div>
+    <div id="psy101" class="panel"><div class="panel-title">PSY 101 — Introduction to Psychology</div><div class="panel-meta">3 cr · Required · No prerequisites listed</div><div class="panel-desc">Survey of primary psychology topics including its historical evolution, aims, and research methods. Covers biopsychosocial bases of thought, feelings, and behavior, social determinants, and applications of psychology in various fields of human activity.</div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('psy201');event.stopPropagation()">PSY 201</span><span class="chip" onclick="toggle('psy3xx');event.stopPropagation()">PSY 3XX electives</span></div></div></div>
+    <div id="bio215" class="panel"><div class="panel-title">BIO 215 — Anatomy &amp; Physiology I</div><div class="panel-meta">4 cr · Fall only · Required</div><div class="panel-desc">Comprehensive study of human anatomy and physiology at the cell, tissue, and organ-system levels. Covers anatomical terminology, basic chemistry of life, and the integumentary, skeletal, muscular, nervous, and endocrine systems. Three class hours and three lab hours.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span><span class="chip" onclick="toggle('bio118');event.stopPropagation()">BIO 118</span><span class="chip" onclick="toggle('chem-y2');event.stopPropagation()">CHEM 106/111 (concurrent ok)</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio216');event.stopPropagation()">BIO 216</span></div></div></div>
+    <div id="gbd-y2f" class="panel"><div class="panel-title">GBD — Golden Bear Discovery</div><div class="panel-meta">3 cr</div><p class="panel-note">Trail course. No specific prerequisites for most sections. 4 GBD courses required total (including GOLD in Y1 fall).</p></div>
+  </div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Spring semester</span>
+      <span class="sem-cr">16 cr</span>
+      <span class="sem-badge spring-badge">Spring</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('math-stats')"><div class="card-stripe" style="background:var(--phys)"></div><div class="card-body"><div class="card-code">MATH 120/121</div><div class="card-name">Statistics (choose one)</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-req">required</span><span class="tag tag-opt">alt. option</span></div></div></div>
+      <div class="card" onclick="toggle('psy201')"><div class="card-stripe" style="background:var(--psy)"></div><div class="card-body"><div class="card-code">PSY 201</div><div class="card-name">Developmental Psych</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('bio216')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 216</div><div class="card-name">Anatomy &amp; Physiology II</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('gen-y2sp')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN XXX</div><div class="card-name">General Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('wic2')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">WIC 2XX</div><div class="card-name">Writing Intensive</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-wic">WIC</span></div></div></div>
+    </div>
+    <div id="math-stats" class="panel"><div class="panel-title">MATH 120 or MATH 121 — Statistics</div><div class="panel-meta">3 cr · Required · Choose one</div><div class="panel-desc">Both options satisfy the statistics requirement. MATH 120 is designed specifically for Arts &amp; Sciences students and covers descriptive/inferential statistics, data visualization, correlation, regression, confidence intervals, and hypothesis testing. MATH 121 is a slightly more rigorous alternative.</div><div class="opt-box"><strong>MATH 120</strong> — Intro Statistics for Arts &amp; Sciences. Cannot receive credit for both MATH 120 and MATH 121.<br><br><strong>MATH 121</strong> — Introductory Probability &amp; Statistics. Cannot receive credit for both MATH 120 and MATH 121.</div><div class="panel-row" style="margin-top:10px"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('hs325');event.stopPropagation()">HS 325 Epidemiology (elective)</span></div></div></div>
+    <div id="psy201" class="panel"><div class="panel-title">PSY 201 — Developmental Psychology</div><div class="panel-meta">3 cr · Required</div><div class="panel-desc">Study of behavior change from infancy through adulthood. Examines prenatal development and the development of motor, perceptual, social, emotional, and cognitive behavior. Topics include developmental disabilities, parenting, and education.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('psy101');event.stopPropagation()">PSY 101</span></div></div></div>
+    <div id="bio216" class="panel"><div class="panel-title">BIO 216 — Anatomy &amp; Physiology II</div><div class="panel-meta">4 cr · Spring only · Required</div><div class="panel-desc">A continuation of BIO 215. Covers the structure and function of the skeletal, muscular, cardiovascular, immune, digestive, respiratory, urinary, and reproductive systems. Three class hours and three lab hours.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio215');event.stopPropagation()">BIO 215</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('hs315');event.stopPropagation()">HS 315 (elective)</span><span class="chip" onclick="toggle('hs320');event.stopPropagation()">HS 320 (elective)</span><span class="chip" onclick="toggle('hs321');event.stopPropagation()">HS 321 (elective)</span><span class="chip" onclick="toggle('hs310');event.stopPropagation()">HS 310 (elective)</span><span class="chip" onclick="toggle('hs330');event.stopPropagation()">HS 330 (elective)</span></div></div></div>
+    <div id="gen-y2sp" class="panel"><div class="panel-title">GEN XXX — General Elective</div><div class="panel-meta">3 cr</div><p class="panel-note">No major prerequisites. Consult advisor for GBD trail planning.</p></div>
+    <div id="wic2" class="panel"><div class="panel-title">WIC 2XX — Writing Intensive course (200/300-level)</div><div class="panel-meta">3 cr</div><p class="panel-note">6 WIC credits required total: one at 200/300-level (this one), one at 300/400-level (Y3 spring). Can double-count toward GBD or major requirements.</p></div>
+  </div>
+</div>
+
+<!-- ═══════ YEAR 3 ═══════ -->
+<div class="yr-wrap">
+  <div class="yr-head"><span class="yr-label">Year 3</span><div class="yr-line"></div></div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Fall semester</span>
+      <span class="sem-cr">15 cr</span>
+      <span class="sem-badge fall-badge">Fall</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('ph208')"><div class="card-stripe" style="background:var(--psy)"></div><div class="card-body"><div class="card-code">PH 208 or 231</div><div class="card-name">Ethics / Biomed Ethics</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('gbd-y3f')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GBD</div><div class="card-name">Golden Bear Discovery</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('hs2xx-y3f')"><div class="card-stripe" style="background:var(--hs)"></div><div class="card-body"><div class="card-code">HS 2XX</div><div class="card-name">HS Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gen3xx-y3f')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN 3XX</div><div class="card-name">Upper-level Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gen-y3f')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN XXX</div><div class="card-name">General Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+    </div>
+    <div id="ph208" class="panel"><div class="panel-title">PH 208 or PH 231 — Ethics / Biomedical Ethics</div><div class="panel-meta">3 cr · Required · Either course satisfies requirement</div><div class="panel-desc">PH 208 is a general ethics course; PH 231 focuses specifically on biomedical ethics, examining ethical issues in medicine, research, and health care. Both satisfy the requirement. No prerequisites listed.</div></div>
+    <div id="gbd-y3f" class="panel"><div class="panel-title">GBD — Golden Bear Discovery</div><div class="panel-meta">3 cr</div><p class="panel-note">Trail course. No specific prerequisites for most sections.</p></div>
+    <div id="hs2xx-y3f" class="panel"><div class="panel-title">HS 2XX — Health Studies Elective</div><div class="panel-meta">3 cr · Part of 12-cr HS 2XX–4XX requirement</div><p class="panel-note">Choose from approved HS 2XX–4XX elective pool below. At least 3 cr of HS coursework must be at the 300-level or above. Prerequisites vary by elective.</p></div>
+    <div id="gen3xx-y3f" class="panel"><div class="panel-title">GEN 3XX — Upper-level Elective</div><div class="panel-meta">3 cr · Must be 300-level or above</div><p class="panel-note">Prerequisites vary by course chosen.</p></div>
+    <div id="gen-y3f" class="panel"><div class="panel-title">GEN XXX — General Elective</div><div class="panel-meta">3 cr</div><p class="panel-note">No major prerequisites.</p></div>
+  </div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Spring semester</span>
+      <span class="sem-cr">15 cr</span>
+      <span class="sem-badge spring-badge">Spring</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('hs3xx-y3sp')"><div class="card-stripe" style="background:var(--hs)"></div><div class="card-body"><div class="card-code">HS 3XX</div><div class="card-name">HS Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gen-y3sp')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN XXX</div><div class="card-name">General Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('psy3xx-y3sp')"><div class="card-stripe" style="background:var(--psy)"></div><div class="card-body"><div class="card-code">PSY 3XX</div><div class="card-name">Psychology Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gen3xx-y3sp')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN 3XX</div><div class="card-name">Upper-level Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('wic3')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">WIC 3XX</div><div class="card-name">Writing Intensive</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-wic">WIC</span></div></div></div>
+    </div>
+    <div id="hs3xx-y3sp" class="panel"><div class="panel-title">HS 3XX — Health Studies Elective</div><div class="panel-meta">3 cr · 300-level HS course</div><p class="panel-note">Counts toward the 12-cr HS 2XX–4XX requirement and the minimum 3 cr at 300-level. See elective pool below. Prerequisites vary.</p></div>
+    <div id="gen-y3sp" class="panel"><div class="panel-title">GEN XXX — General Elective</div><div class="panel-meta">3 cr</div><p class="panel-note">No major prerequisites.</p></div>
+    <div id="psy3xx-y3sp" class="panel"><div class="panel-title">PSY 3XX — Psychology Elective</div><div class="panel-meta">3 cr · One of two required PSY 3XX electives</div><div class="panel-desc">One of two required 300-level psychology electives. The major requires PSY 101, PSY 201, and two PSY 3XX courses. Many options available — see Psychology department for offerings.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('psy101');event.stopPropagation()">PSY 101 typically required</span></div></div><div class="panel-row"><span class="panel-label">Examples</span><div class="chips"><span class="chip nc">PSY 303 Personality</span><span class="chip nc">PSY 312 Physiological Psych</span><span class="chip nc">PSY 326 Abnormal Psych</span><span class="chip nc">PSY 319 Forensic Psych</span></div></div></div>
+    <div id="gen3xx-y3sp" class="panel"><div class="panel-title">GEN 3XX — Upper-level Elective</div><div class="panel-meta">3 cr · Must be 300-level or above</div><p class="panel-note">Prerequisites vary by course chosen.</p></div>
+    <div id="wic3" class="panel"><div class="panel-title">WIC 3XX — Writing Intensive course (300/400-level)</div><div class="panel-meta">3 cr · Satisfies upper WIC requirement</div><p class="panel-note">Must be 300-level or above. Fulfills the upper Writing Intensive requirement. Can double-count toward major electives or GBD if applicable.</p></div>
+  </div>
+</div>
+
+<!-- ═══════ YEAR 4 ═══════ -->
+<div class="yr-wrap">
+  <div class="yr-head"><span class="yr-label">Year 4</span><div class="yr-line"></div></div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Fall semester</span>
+      <span class="sem-cr">15 cr</span>
+      <span class="sem-badge fall-badge">Fall</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('gen-y4fa')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN XXX</div><div class="card-name">General Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('hs3xx-y4f')"><div class="card-stripe" style="background:var(--hs)"></div><div class="card-body"><div class="card-code">HS 3XX</div><div class="card-name">HS Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gen-y4fb')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN XXX</div><div class="card-name">General Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('psy3xx-y4f')"><div class="card-stripe" style="background:var(--psy)"></div><div class="card-body"><div class="card-code">PSY 3XX</div><div class="card-name">Psychology Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gen3xx-y4f')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN 3XX</div><div class="card-name">Upper-level Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+    </div>
+    <div id="gen-y4fa" class="panel"><div class="panel-title">GEN XXX — General Elective</div><div class="panel-meta">3 cr</div><p class="panel-note">No major prerequisites.</p></div>
+    <div id="hs3xx-y4f" class="panel"><div class="panel-title">HS 3XX — Health Studies Elective</div><div class="panel-meta">3 cr · 300-level HS course</div><p class="panel-note">Counts toward the 12-cr HS 2XX–4XX requirement and the minimum 3 cr at 300-level or above. See elective pool below.</p></div>
+    <div id="gen-y4fb" class="panel"><div class="panel-title">GEN XXX — General Elective</div><div class="panel-meta">3 cr</div><p class="panel-note">No major prerequisites.</p></div>
+    <div id="psy3xx-y4f" class="panel"><div class="panel-title">PSY 3XX — Psychology Elective</div><div class="panel-meta">3 cr · Second required PSY 3XX elective</div><div class="panel-desc">Second of two required 300-level psychology electives. The major requires PSY 101, PSY 201, and two PSY 3XX courses total.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('psy101');event.stopPropagation()">PSY 101 typically required</span></div></div></div>
+    <div id="gen3xx-y4f" class="panel"><div class="panel-title">GEN 3XX — Upper-level Elective</div><div class="panel-meta">3 cr · Must be 300-level or above</div><p class="panel-note">Prerequisites vary by course chosen.</p></div>
+  </div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Spring semester</span>
+      <span class="sem-cr">14 cr</span>
+      <span class="sem-badge spring-badge">Spring</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('hs3xx-y4sp')"><div class="card-stripe" style="background:var(--hs)"></div><div class="card-body"><div class="card-code">HS 3XX</div><div class="card-name">HS Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('hs471')"><div class="card-stripe" style="background:var(--hs)"></div><div class="card-body"><div class="card-code">HS 471</div><div class="card-name">Seminar in Health Studies</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-cap">capstone</span></div></div></div>
+      <div class="card" onclick="toggle('gen3xx-y4spa')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN 3XX</div><div class="card-name">Upper-level Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gen3xx-y4spb')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN 3XX</div><div class="card-name">Upper-level Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gen-y4sp')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN XXX</div><div class="card-name">General Elective</div><div class="tags"><span class="tag tag-cr">2 cr</span></div></div></div>
+    </div>
+    <div id="hs3xx-y4sp" class="panel"><div class="panel-title">HS 3XX — Health Studies Elective</div><div class="panel-meta">3 cr · 300-level HS course</div><p class="panel-note">Final HS elective toward the 12-cr requirement. At least 3 cr of HS elective work must be at the 300-level; this slot (along with Y3 spring and Y4 fall) can satisfy that minimum. See elective pool below.</p></div>
+    <div id="hs471" class="panel"><div class="panel-title">HS 471 — Seminar in Health Studies</div><div class="panel-meta">3 cr · Required Capstone · Spring Y4</div><div class="panel-desc">Capstone experience for Health Studies majors. Students read, discuss, and present articles from the primary literature related to a particular theme in health science. Broader and more substantial than HS 470 (the Health Sciences capstone).</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">Senior standing recommended</span></div></div><p class="panel-note">HS 471 (3 cr) is the Health Studies capstone. Note: this is distinct from HS 470 (1 cr), which is the Health Sciences capstone.</p></div>
+    <div id="gen3xx-y4spa" class="panel"><div class="panel-title">GEN 3XX — Upper-level Elective</div><div class="panel-meta">3 cr · Must be 300-level or above</div><p class="panel-note">Prerequisites vary by course chosen.</p></div>
+    <div id="gen3xx-y4spb" class="panel"><div class="panel-title">GEN 3XX — Upper-level Elective</div><div class="panel-meta">3 cr · Must be 300-level or above</div><p class="panel-note">Prerequisites vary by course chosen.</p></div>
+    <div id="gen-y4sp" class="panel"><div class="panel-title">GEN XXX — General Elective</div><div class="panel-meta">2 cr</div><p class="panel-note">No major prerequisites. The reduced credit count here (2 cr vs 3 cr) reflects the catalog sequence's total of 14 cr for Y4 spring.</p></div>
+  </div>
+</div>
+
+<!-- ═══════ HS ELECTIVE POOL ═══════ -->
+<div class="sec-head">HS 2XX–4XX elective pool</div>
+<p style="font-size:12px;color:var(--text-3);margin-bottom:12px;">12 cr required from HS 2XX–4XX courses (plus HS 471 capstone = 15 cr total). At least 3 cr must be at the 300-level or above. The following courses also count: BIO 203, BIO 310, BIO 320, BIO 401, BME 425, CHEM 402, NSCI 212, NSCI 248, NSCI 348.</p>
+
+<div class="elec-grid">
+  <div class="elec-card" onclick="toggle('hs210')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">HS 210 · 3 cr</div><div class="elec-name">Nutrition</div><div class="elec-desc">Science of nutrition: food choices, health behaviors, wellness, obesity, eating disorders, and diet-related disease.</div><div class="elec-prereq">Prereq: BIO 107+117 · Earliest: Y2</div></div></div>
+  <div class="elec-card" onclick="toggle('hs215')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">HS 215 · 3 cr</div><div class="elec-name">Introduction to GIS</div><div class="elec-desc">Geographic Information Science applications in health care: tracking disease, epidemiological research, health policy.</div><div class="elec-prereq">Prereq: sophomore standing · Earliest: Y2</div></div></div>
+  <div class="elec-card" onclick="toggle('hs305')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">HS 305 · 3 cr</div><div class="elec-name">Physics of Medical Imaging</div><div class="elec-desc">Physical principles of ultrasound, x-ray, CT, PET, and MRI. No prior physics required.</div><div class="elec-prereq">Prereq: BIO 108, CHEM 106, junior standing (or permission)</div></div></div>
+  <div class="elec-card" onclick="toggle('hs310')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">HS 310 · 3 cr</div><div class="elec-name">Environmental Health</div><div class="elec-desc">Health impacts of chemical, biological, physical, and social environmental factors. Air/water pollutants, radiation, climate, and socioeconomic effects.</div><div class="elec-prereq">Prereq: BIO 108, CHEM 106, BIO 216 (or permission)</div></div></div>
+  <div class="elec-card" onclick="toggle('hs315')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">HS 315 · 3 cr</div><div class="elec-name">Protein Folding &amp; Disease</div><div class="elec-desc">Protein misfolding, aggregation diseases, prion diseases, Alzheimer's, Parkinson's, Cystic Fibrosis, and cancer.</div><div class="elec-prereq">Prereq: BIO 216 (or permission)</div></div></div>
+  <div class="elec-card" onclick="toggle('hs320')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">HS 320 · 3 cr</div><div class="elec-name">Regeneration</div><div class="elec-desc">Regeneration in mammals; progress in regenerative medicine for selected organ systems. Oral presentation and review paper required.</div><div class="elec-prereq">Prereq: BIO 107 (C−) and BIO 216 or BIO 310</div></div></div>
+  <div class="elec-card" onclick="toggle('hs321')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">HS 321 · 3 cr</div><div class="elec-name">Evolutionary Medicine</div><div class="elec-desc">Application of evolutionary thinking to understanding health and disease in contemporary human populations. Draws on evolutionary biology, genetics, neuroscience, physiology, and nutritional sciences.</div><div class="elec-prereq">Prereq: BIO 216 (or permission)</div></div></div>
+  <div class="elec-card" onclick="toggle('hs322')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">HS 322 · 3 cr</div><div class="elec-name">Immunology</div><div class="elec-desc">Three lines of human defense against infection; autoimmunity, allergies, and cancer from immune dysfunction.</div><div class="elec-prereq">Prereq: BIO 107, CHEM 209 · Note: CHEM 209 not in HST core</div></div></div>
+  <div class="elec-card" onclick="toggle('hs325')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">HS 325 · 3 cr</div><div class="elec-name">Epidemiology</div><div class="elec-desc">Distribution and determinants of disease at the population level. Study design, measures of association, disease prevention and control.</div><div class="elec-prereq">Prereq: BIO 108, MATH 120/121, junior standing; BIO 215+216 recommended</div></div></div>
+  <div class="elec-card" onclick="toggle('hs330')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">HS 330 · 3 cr</div><div class="elec-name">Molecular Genetics &amp; Human Disorders</div><div class="elec-desc">Mendelian inheritance, exceptions to Mendelian genetics, gene expression, DNA behavior, and human genetic disorders. Capstone project on diagnosing or treating a genetic disorder.</div><div class="elec-prereq">Prereq: BIO 216 (or permission)</div></div></div>
+  <div class="elec-card" onclick="toggle('hs412')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">HS 412 · 3 cr</div><div class="elec-name">Cancer Biology</div><div class="elec-desc">Fundamentals of cancer biology: oncogenes, cell cycle control, apoptosis, metastasis, and targeted therapies. For junior/senior HS or Bio majors.</div><div class="elec-prereq">Prereq: BIO 306, or permission of instructor</div></div></div>
+  <div class="elec-card" onclick="toggle('e-nsci248')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">NSCI 248 · 3 cr</div><div class="elec-name">Reproductive Endocrinology</div><div class="elec-desc">Human reproductive anatomy, endocrinology, and reproductive medicine. Hormone regulation and contemporary reproductive medicine issues.</div><div class="elec-prereq">Prereq: BIO 107+117 · Earliest: Y2</div></div></div>
+  <div class="elec-card" onclick="toggle('e-nsci348')"><div class="elec-stripe" style="background:var(--hs)"></div><div><div class="elec-code">NSCI 348 · 3 cr</div><div class="elec-name">Sport-Induced Concussions</div><div class="elec-desc">Brain anatomy, neurological effects of head trauma, concussion assessment, management, and return-to-play protocols.</div><div class="elec-prereq">Prereq: sophomore standing · Earliest: Y2</div></div></div>
+</div>
+
+<!-- Elective panels -->
+<div id="hs210" class="panel"><div class="panel-title">HS 210 — Nutrition</div><div class="panel-meta">3 cr</div><div class="panel-desc">Introduces students to the science of nutrition as it relates to individual food choices, health behaviors, and overall health. Application topics include wellness, obesity, eating disorders, sports nutrition, and diet-related disease. Intended for students entering health-related fields.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span></div></div><p class="panel-note">Recommended for students planning to apply to accelerated BSN programs. Can be taken as early as Y2 fall.</p></div>
+<div id="hs215" class="panel"><div class="panel-title">HS 215 — Introduction to GIS</div><div class="panel-meta">3 cr</div><div class="panel-desc">Geographic Information Science (GIS) is used to manage, analyze, and visualize health-care data. Applications include tracking disease outbreaks, conducting health policy research, and monitoring child immunizations. Students analyze real health-care data sets.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">Sophomore standing</span></div></div></div>
+<div id="hs305" class="panel"><div class="panel-title">HS 305 — Introduction to the Physics of Medical Imaging</div><div class="panel-meta">3 cr</div><div class="panel-desc">Medical imaging plays an essential role in medical practice and research. Covers key physical principles underlying ultrasound, x-ray, computed tomography, positron emission tomography, and MRI. No prior physics required — all concepts introduced in class.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span><span class="chip" onclick="toggle('chem105');event.stopPropagation()">CHEM 106 (or CHEM 111)</span><span class="chip nc">Junior standing (or permission)</span></div></div></div>
+<div id="hs310" class="panel"><div class="panel-title">HS 310 — Environmental Influences on Human Health</div><div class="panel-meta">3 cr</div><div class="panel-desc">Introductory investigation of human health impacts of chemical, biological, physical, and social environmental factors. Topics include air and water pollutants, toxic wastes, pesticides, foodborne pathogens, noise, radiation, climate, and socioeconomic status.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span><span class="chip" onclick="toggle('chem105');event.stopPropagation()">CHEM 106 (or CHEM 111)</span><span class="chip" onclick="toggle('bio216');event.stopPropagation()">BIO 216 (or permission)</span></div></div></div>
+<div id="hs315" class="panel"><div class="panel-title">HS 315 — Protein Folding, Misfolding &amp; Disease</div><div class="panel-meta">3 cr</div><div class="panel-desc">Covers effects of alterations to folded protein structure due to environmental stress, genetic mutation, or infection. Examines prion diseases (mad cow disease, CJD, kuru) and other aggregation diseases including Alzheimer's, Parkinson's, Cystic Fibrosis, and cancer.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio216');event.stopPropagation()">BIO 216 (or permission)</span></div></div></div>
+<div id="hs320" class="panel"><div class="panel-title">HS 320 — Regeneration</div><div class="panel-meta">3 cr</div><div class="panel-desc">Focuses on regeneration in mammals and progress in regenerative medicine for selected organ systems. An oral presentation and a review paper on a topic of interest are required.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107 (C− min)</span><span class="chip" onclick="toggle('bio216');event.stopPropagation()">BIO 216</span></div></div></div>
+<div id="hs321" class="panel"><div class="panel-title">HS 321 — Evolutionary Medicine</div><div class="panel-meta">3 cr</div><div class="panel-desc">Comprehensive introduction to evolutionary medicine: the application of evolutionary thinking, including human evolutionary history, to understanding health and disease in contemporary populations. Draws on evolutionary biology, genetics, neuroscience, physiology, nutritional sciences, and medicine.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio216');event.stopPropagation()">BIO 216 (or permission)</span></div></div></div>
+<div id="hs322" class="panel"><div class="panel-title">HS 322 — Immunology</div><div class="panel-meta">3 cr</div><div class="panel-desc">Introduces the three lines of human defense against infection. Covers how improper immune functioning can result in autoimmunity, allergies, and cancer.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip nc">CHEM 209</span></div></div><div class="warn-box">CHEM 209 (Organic Chemistry I) is not part of the Health Studies core curriculum — it requires CHEM 106, which is the alternate (non-standard) chemistry path. Students would need to take CHEM 106 instead of CHEM 111, then CHEM 209, to access this elective. Consult advisor.</div></div>
+<div id="hs325" class="panel"><div class="panel-title">HS 325 — Epidemiology</div><div class="panel-meta">3 cr</div><div class="panel-desc">Introduction to principles and methods of epidemiology: the study of the distribution and determinants of disease at the population level. Covers study design, measures of disease distribution and association, and application of research findings to prevention and control.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span><span class="chip" onclick="toggle('math-stats');event.stopPropagation()">MATH 120 or 121</span><span class="chip nc">Junior standing</span></div></div><p class="panel-note">BIO 215 and BIO 216 are recommended but not required.</p></div>
+<div id="hs330" class="panel"><div class="panel-title">HS 330 — Molecular Genetics and Human Disorders</div><div class="panel-meta">3 cr</div><div class="panel-desc">Explores the depths of genetic inheritance from Mendelian exceptions through gene expression and DNA behavior. Discusses human genetic disorders rooted in Mendelian principles. Capstone project exploring approaches for diagnosing or treating a human genetic disorder.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio216');event.stopPropagation()">BIO 216 (or permission)</span></div></div></div>
+<div id="hs412" class="panel"><div class="panel-title">HS 412 — Cancer Biology</div><div class="panel-meta">3 cr · For junior/senior HS or Biology majors</div><div class="panel-desc">Overview of cancer biology and treatment. Topics include cancer as a genetic disease, oncogenes, familial cancer, signal transduction, cell cycle control, apoptosis, cancer metabolism, metastasis, and conventional and molecularly-targeted therapies.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">BIO 306 (or permission)</span></div></div><div class="warn-box">BIO 306 (Genetics) is not part of the Health Studies core — it requires CHEM 210, which is only in the Health Sciences curriculum. Health Studies students would need instructor permission to enroll.</div></div>
+<div id="e-nsci248" class="panel"><div class="panel-title">NSCI 248 — Reproductive Endocrinology &amp; Physiology</div><div class="panel-meta">3 cr</div><div class="panel-desc">Addresses reproductive strategies of non-humans, human reproductive anatomy and physiology, human reproductive endocrinology, and reproductive medicine. Covers physiological systems of hormone regulation and contemporary issues in reproductive medicine.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span></div></div></div>
+<div id="e-nsci348" class="panel"><div class="panel-title">NSCI 348 — Sport-Induced Concussions</div><div class="panel-meta">3 cr</div><div class="panel-desc">Comprehensive examination of sport-induced concussions. Covers brain anatomy, neurological effects of physical trauma, immediate and long-term symptoms, cognitive and neurological diagnostic tools, effects of repeated concussions, and return-to-play protocols.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">Sophomore standing</span></div></div></div>
+
+<!-- ═══════ PSY ELECTIVES NOTE ═══════ -->
+<div class="sec-head">Psychology elective pool (PSY 3XX × 2 required)</div>
+<p style="font-size:12px;color:var(--text-3);margin-bottom:12px;">The major requires two 300-level PSY electives in addition to PSY 101 and PSY 201. Most require PSY 101 as a prerequisite. Examples of common choices:</p>
+<div class="elec-grid">
+  <div class="elec-card"><div class="elec-stripe" style="background:var(--psy)"></div><div><div class="elec-code">PSY 303 · 3 cr</div><div class="elec-name">Personality</div><div class="elec-prereq">Prereq: PSY 101</div></div></div>
+  <div class="elec-card"><div class="elec-stripe" style="background:var(--psy)"></div><div><div class="elec-code">PSY 312 · 3 cr</div><div class="elec-name">Physiological Psychology</div><div class="elec-prereq">Prereq: PSY 101</div></div></div>
+  <div class="elec-card"><div class="elec-stripe" style="background:var(--psy)"></div><div><div class="elec-code">PSY 315 · 3 cr</div><div class="elec-name">Cultural Psychology</div><div class="elec-prereq">Prereq: PSY 101</div></div></div>
+  <div class="elec-card"><div class="elec-stripe" style="background:var(--psy)"></div><div><div class="elec-code">PSY 317 · 3 cr</div><div class="elec-name">Psychology of Exceptional Persons</div><div class="elec-prereq">Prereq: PSY 101</div></div></div>
+  <div class="elec-card"><div class="elec-stripe" style="background:var(--psy)"></div><div><div class="elec-code">PSY 319 · 3 cr</div><div class="elec-name">Forensic Psychology</div><div class="elec-prereq">Prereq: PSY 101</div></div></div>
+  <div class="elec-card"><div class="elec-stripe" style="background:var(--psy)"></div><div><div class="elec-code">PSY 326 · 3 cr</div><div class="elec-name">Abnormal Psychology</div><div class="elec-prereq">Prereq: PSY 101 + junior standing</div></div></div>
+</div>
+<div id="psy3xx" class="panel"><div class="panel-title">PSY 3XX — Psychology Electives</div><div class="panel-meta">6 cr total (two courses)</div><div class="panel-desc">The major requires two 300-level psychology electives beyond PSY 101 and PSY 201. PSY 101 is typically a prerequisite. PSY 326 (Abnormal Psychology) also requires junior standing.</div></div>
+
+<!-- ═══════ CRITICAL PATH ═══════ -->
+<div class="sec-head">Critical path &amp; advising notes</div>
+<ul class="note-list">
+  <li class="crit"><strong>BIO 215 (fall only) is the first major bottleneck.</strong> It requires BIO 108+118 (spring Y1) and CHEM 106 or CHEM 111 (concurrent ok). Since CHEM 111 is fall only and requires CHEM 105, the standard path is: CHEM 105 (Y1 spring) → CHEM 111 (Y2 fall, concurrent with BIO 215). Delaying CHEM 105 or BIO 107/117 out of Y1 pushes BIO 215 to Y3 fall at the earliest.</li>
+  <li><strong>CHEM 111 vs CHEM 106:</strong> CHEM 111 is the standard Health Studies path (fall only; broader, health-career-focused). CHEM 106 is used by Health Sciences and pre-Pharmacy students (spring only; more rigorous). Students cannot receive credit for both. Students considering switching to Health Sciences or pursuing pharmacy should take CHEM 106 instead.</li>
+  <li><strong>BIO 216 (spring only)</strong> requires BIO 215. Since BIO 215 is fall only, BIO 216 cannot start until Y2 spring at the earliest. BIO 216 is a prerequisite for most upper-level HS electives (HS 315, 320, 321, 310, 330).</li>
+  <li><strong>Statistics requirement (MATH 120 or 121):</strong> Placed in Y2 spring per the suggested sequence. Earlier is better — MATH 120/121 is a prerequisite for HS 325 (Epidemiology), and statistical literacy supports lab and research work across the major.</li>
+  <li><strong>PSY elective sequencing:</strong> Two PSY 3XX courses are required. PSY 326 (Abnormal Psychology) also requires junior standing. Both electives are spread across Y3 spring and Y4 fall in the suggested sequence — plan course selections by Y2 to ensure prerequisites are met.</li>
+  <li><strong>HS 322 (Immunology)</strong> requires CHEM 209 (Organic Chemistry I), which is not in the Health Studies core and requires CHEM 106 as a prerequisite. Health Studies students who want this elective must deviate from the standard CHEM 111 path — consult advisor early.</li>
+  <li><strong>HS 412 (Cancer Biology)</strong> requires BIO 306 (Genetics), also not in the Health Studies core. Instructor permission is the practical path for Health Studies students.</li>
+  <li><strong>HS 471 (Seminar — capstone, 3 cr)</strong> is distinct from HS 470 (the Health Sciences capstone, 1 cr). HS 471 is larger and more substantial. No hard prerequisites listed in the catalog, but it is placed in Y4 spring; senior standing is implied.</li>
+  <li><strong>This program is NOT a path to the WNE PharmD.</strong> The catalog explicitly states that the Health Studies curriculum does not fulfill all PharmD prerequisite requirements. Students considering pharmacy school should follow the Health Sciences curriculum instead.</li>
+  <li><strong>Major GPA:</strong> 2.0 minimum across all HS, BIO, CHEM, and PSY courses pursued as part of the degree. Total credits: 120. Major core: 60 cr. WIC: 6 cr required (one 200/300-level, one 300/400-level). No transfer credit for major-level science lab courses taught online.</li>
+</ul>
+
+</div>
+<script>
+function toggle(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var wasOpen = el.classList.contains('show');
+  document.querySelectorAll('.panel.show').forEach(function(p) { p.classList.remove('show'); });
+  document.querySelectorAll('.card.active, .elec-card.active').forEach(function(c) { c.classList.remove('active'); });
+  if (!wasOpen) {
+    el.classList.add('show');
+    var card = el.previousElementSibling;
+    while (card && !card.classList.contains('card') && !card.classList.contains('elec-card')) {
+      card = card.previousElementSibling;
+    }
+    if (card) card.classList.add('active');
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+</script>
+</body>
+</html>

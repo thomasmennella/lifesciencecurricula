@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BS Biology — Course Prerequisite Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f6f2;
+  --surface: #ffffff;
+  --surface2: #f0efe9;
+  --border: rgba(0,0,0,0.09);
+  --border-med: rgba(0,0,0,0.16);
+  --text: #1a1916;
+  --text-2: #6b6860;
+  --text-3: #9c9a92;
+  --bio: #5b50c8;
+  --chem: #2b7fd4;
+  --phys: #178c60;
+  --math: #178c60;
+  --gen: #7a7870;
+  --warn-bg: #fcebeb;
+  --warn-border: #f09595;
+  --warn-text: #791f1f;
+  --cap-bg: #faece7;
+  --cap-text: #712b13;
+  --wic-bg: #fbeaf0;
+  --wic-text: #72243e;
+  --fall-bg: #eeedfe;
+  --fall-text: #3c3489;
+  --spring-bg: #e1f5ee;
+  --spring-text: #085041;
+  --opt-bg: #faeeda;
+  --opt-text: #633806;
+  --accent: #d4501a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; min-height: 100vh; }
+
+/* Page header */
+.page-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 26px 40px 20px; position: sticky; top: 0; z-index: 100; }
+.page-header h1 { font-size: 17px; font-weight: 500; letter-spacing: -0.01em; }
+.page-header p { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; align-items: center; }
+.meta-item { font-size: 11px; color: var(--text-2); display: flex; align-items: center; gap: 5px; }
+.meta-dot { width: 7px; height: 7px; border-radius: 1.5px; flex-shrink: 0; }
+.meta-sep { width: 1px; height: 14px; background: var(--border-med); }
+.leg-tag { font-size: 10px; font-family: 'DM Mono', monospace; padding: 1px 5px; border-radius: 3px; font-weight: 500; }
+
+/* Main */
+.main { max-width: 900px; margin: 0 auto; padding: 36px 40px 80px; }
+
+/* Year bands */
+.yr-wrap { margin-bottom: 40px; }
+.yr-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.yr-label { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); font-family: 'DM Mono', monospace; }
+.yr-line { flex: 1; height: 1px; background: var(--border); }
+
+/* Semesters */
+.sem { margin-bottom: 20px; }
+.sem-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.sem-title { font-size: 12px; font-weight: 500; color: var(--text-2); }
+.sem-cr { font-size: 11px; color: var(--text-3); font-family: 'DM Mono', monospace; }
+.sem-badge { font-size: 10px; font-weight: 500; font-family: 'DM Mono', monospace; padding: 2px 7px; border-radius: 20px; }
+.fall-badge { background: var(--fall-bg); color: var(--fall-text); }
+.spring-badge { background: var(--spring-bg); color: var(--spring-text); }
+
+/* Card grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 7px; }
+
+/* Course card */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 11px 10px 0; cursor: pointer; transition: border-color .12s, box-shadow .12s; display: flex; user-select: none; }
+.card:hover { border-color: var(--border-med); box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.card.active { border-color: rgba(0,0,0,0.25); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+.card-stripe { width: 3px; border-radius: 0 2px 2px 0; flex-shrink: 0; margin-right: 9px; align-self: stretch; min-height: 52px; }
+.card-body { flex: 1; min-width: 0; }
+.card-code { font-size: 12px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--text); margin-bottom: 2px; }
+.card-name { font-size: 11px; color: var(--text-2); margin-bottom: 6px; line-height: 1.3; }
+.tags { display: flex; flex-wrap: wrap; gap: 3px; }
+.tag { font-size: 9px; font-family: 'DM Mono', monospace; font-weight: 500; padding: 1px 5px; border-radius: 3px; white-space: nowrap; }
+.tag-cr   { background: #f1efe8; color: #5f5e5a; }
+.tag-fo   { background: var(--fall-bg); color: var(--fall-text); }
+.tag-so   { background: var(--spring-bg); color: var(--spring-text); }
+.tag-wic  { background: var(--wic-bg); color: var(--wic-text); }
+.tag-cap  { background: var(--cap-bg); color: var(--cap-text); }
+.tag-warn { background: var(--warn-bg); color: var(--warn-text); border: 1px solid var(--warn-border); }
+.tag-opt  { background: var(--opt-bg); color: var(--opt-text); }
+.tag-req  { background: #eeedfe; color: #3c3489; }
+
+/* Detail panel */
+.panel { background: var(--surface); border: 1px solid var(--border-med); border-radius: 10px; padding: 14px 16px; margin-top: 8px; display: none; animation: slideDown .15s ease; }
+.panel.show { display: block; }
+@keyframes slideDown { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+.panel-desc {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.55;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.panel-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.panel-meta { font-size: 11px; color: var(--text-3); font-family: 'DM Mono', monospace; margin-bottom: 10px; }
+.panel-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 7px; flex-wrap: wrap; }
+.panel-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; padding-top: 3px; flex-shrink: 0; min-width: 56px; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip { font-size: 11px; font-family: 'DM Mono', monospace; padding: 2px 8px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border-med); color: var(--text); cursor: pointer; transition: background .1s; white-space: nowrap; }
+.chip:hover { background: #eeedfe; }
+.chip.co { border-style: dashed; background: transparent; }
+.chip.co:hover { background: var(--surface2); }
+.chip.nc { cursor: default; }
+.chip.nc:hover { background: var(--surface2); }
+.panel-note { font-size: 11px; color: var(--text-3); margin-top: 8px; line-height: 1.5; font-style: italic; }
+.warn-box { margin-top: 10px; background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: 6px; padding: 8px 11px; font-size: 11px; color: var(--warn-text); line-height: 1.5; }
+.opt-box { margin-top: 10px; background: var(--opt-bg); border: 1px solid #f0c97a; border-radius: 6px; padding: 8px 11px; font-size: 11px; color: var(--opt-text); line-height: 1.5; }
+
+/* Section headings */
+.sec-head { font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); font-family: 'DM Mono', monospace; margin: 36px 0 12px; display: flex; align-items: center; gap: 10px; }
+.sec-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* Elective grid */
+.elec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 7px; margin-top: 10px; }
+.elec-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 10px 0; display: flex; cursor: pointer; transition: border-color .12s; }
+.elec-card:hover { border-color: var(--border-med); }
+.elec-stripe { width: 3px; border-radius: 0 2px 2px 0; flex-shrink: 0; margin-right: 10px; align-self: stretch; min-height: 48px; }
+.elec-code { font-size: 11px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--text); }
+.elec-name { font-size: 11px; color: var(--text-2); margin: 2px 0 4px; line-height: 1.3; }
+.elec-prereq { font-size: 10px; color: var(--text-3); line-height: 1.4; }
+
+/* Notes */
+.note-list { list-style: none; }
+.note-list li { font-size: 12px; color: var(--text-2); padding: 8px 0 8px 16px; border-bottom: 1px solid var(--border); position: relative; line-height: 1.5; }
+.note-list li::before { content: ''; position: absolute; left: 0; top: 14px; width: 5px; height: 5px; border-radius: 50%; background: var(--border-med); }
+.note-list li.crit { color: var(--warn-text); }
+.note-list li.crit::before { background: var(--accent); }
+.note-list li strong { font-weight: 500; color: var(--text); }
+.note-list li.crit strong { color: var(--warn-text); }
+
+/* Option label for PHYS/MATH alternatives */
+.or-label { font-size: 10px; color: var(--text-3); font-style: italic; margin: 3px 0 3px 12px; }
+
+@media print { .page-header { position: static; } .panel { display: block !important; border: none; background: none; padding: 6px 0; } .card { break-inside: avoid; } }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>BS Biology — Course Prerequisite Map</h1>
+  <p>Western New England University · AY 2025–26 catalog · Click any card to see prerequisites and what it unlocks</p>
+  <div class="meta">
+    <div class="meta-item"><div class="meta-dot" style="background:var(--bio)"></div>Biology</div>
+    <div class="meta-item"><div class="meta-dot" style="background:var(--chem)"></div>Chemistry</div>
+    <div class="meta-item"><div class="meta-dot" style="background:var(--phys)"></div>Physics / Math</div>
+    <div class="meta-item"><div class="meta-dot" style="background:var(--gen)"></div>Gen-ed / other</div>
+    <div class="meta-sep"></div>
+    <div class="meta-item"><span class="leg-tag tag-fo">fall only</span></div>
+    <div class="meta-item"><span class="leg-tag tag-so">spring only</span></div>
+    <div class="meta-item"><span class="leg-tag tag-opt">alt. option</span> Multiple choices exist</div>
+    <div class="meta-item"><span class="leg-tag tag-req">required</span></div>
+    <div class="meta-item"><span class="leg-tag tag-wic">WIC</span> Writing Intensive</div>
+    <div class="meta-item"><span class="leg-tag tag-cap">capstone</span></div>
+    <div class="meta-item"><span class="leg-tag tag-warn">bottleneck</span></div>
+    <div class="meta-sep"></div>
+    <div class="meta-item">Solid chip = prereq · Dashed chip = corequisite</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════ YEAR 1 ═══════ -->
+<div class="yr-wrap">
+  <div class="yr-head"><span class="yr-label">Year 1</span><div class="yr-line"></div></div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Fall semester</span>
+      <span class="sem-cr">15 cr</span>
+      <span class="sem-badge fall-badge">Fall</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio107')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 107</div><div class="card-name">General Biology I</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('bio117')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 117</div><div class="card-name">Gen Biology Lab I</div><div class="tags"><span class="tag tag-cr">1 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem105')"><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 105</div><div class="card-name">General Chemistry I</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('math-y1')"><div class="card-stripe" style="background:var(--math)"></div><div class="card-body"><div class="card-code">MATH 109/123</div><div class="card-name">Precalculus or Calc I</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-opt">alt. option</span></div></div></div>
+      <div class="card" onclick="toggle('engl132')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">ENGL 132</div><div class="card-name">English Composition I</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('blue101')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">BLUE 101</div><div class="card-name">First-Year Seminar</div><div class="tags"><span class="tag tag-cr">1 cr</span></div></div></div>
+    </div>
+    <div id="bio107" class="panel"><div class="panel-title">BIO 107 — General Biology I</div><div class="panel-meta">3 cr · Fall only · Required</div><div class="panel-desc">Intended for science majors, this course focuses on introductory cellular and molecular biology. Concepts include cellular biochemistry, metabolism, and genetics.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">1 unit HS chemistry</span></div></div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span><span class="chip" onclick="toggle('bio118');event.stopPropagation()">BIO 118</span><span class="chip" onclick="toggle('bio213');event.stopPropagation()">BIO 213</span><span class="chip" onclick="toggle('bio201');event.stopPropagation()">BIO 201</span><span class="chip" onclick="toggle('bio306');event.stopPropagation()">BIO 306</span></div></div></div>
+    <div id="bio117" class="panel"><div class="panel-title">BIO 117 — General Biology Lab I</div><div class="panel-meta">1 cr · Fall only · Required</div><div class="panel-desc">Students apply scientific thinking and basic technical skills to the study of cells. Methods include microscopy, spectroscopy, and chromatography, as well as the collection, graphing, and interpretation of data.</div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span><span class="chip" onclick="toggle('bio213');event.stopPropagation()">BIO 213</span><span class="chip" onclick="toggle('bio201');event.stopPropagation()">BIO 201</span><span class="chip" onclick="toggle('bio306');event.stopPropagation()">BIO 306</span><span class="chip" onclick="toggle('bio310');event.stopPropagation()">BIO 310</span></div></div></div>
+    <div id="chem105" class="panel"><div class="panel-title">CHEM 105 — General Chemistry I</div><div class="panel-meta">4 cr · Required</div><div class="panel-desc">First course of a two-semester sequence for science and engineering majors. Topics include stoichiometry, states of matter, chemical reactions and energy, atomic structure, periodic trends, and chemical bonding. Lab experiments develop basic chemistry skills.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">1 unit HS chemistry</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('chem106');event.stopPropagation()">CHEM 106 (C− min)</span><span class="chip" onclick="toggle('bio213');event.stopPropagation()">BIO 213 (concurrent ok)</span></div></div></div>
+    <div id="math-y1" class="panel"><div class="panel-title">MATH 109 or MATH 123 — Precalculus / Calculus I</div><div class="panel-meta">3 cr · Choose based on placement</div><div class="panel-desc">MATH 109 (Precalculus) covers algebraic, exponential, and trigonometric functions — no prerequisites. MATH 123 (Calculus I) covers differential calculus with life-science applications — requires placement. Take MATH 123 directly if placed.</div><div class="opt-box"><strong>MATH 109 (Precalculus):</strong> No prerequisites. Required if not placed into calculus. Unlocks MATH 123 (and from there PHYS 123).<br><br><strong>MATH 123 (Calculus I):</strong> Requires placement. Skip MATH 109. Unlocks PHYS 123 directly.</div><div class="panel-row" style="margin-top:10px"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('phys-y3');event.stopPropagation()">PHYS 123 (via MATH 123)</span></div></div></div>
+    <div id="engl132" class="panel"><div class="panel-title">ENGL 132 — English Composition I</div><div class="panel-meta">3 cr</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">Placement</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('engl133');event.stopPropagation()">ENGL 133</span></div></div></div>
+    <div id="blue101" class="panel"><div class="panel-title">BLUE 101 — First-Year Seminar</div><div class="panel-meta">1 cr · First semester only</div><p class="panel-note">No prerequisites. Required of all first-semester students.</p></div>
+  </div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Spring semester</span>
+      <span class="sem-cr">17 cr</span>
+      <span class="sem-badge spring-badge">Spring</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio108')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 108</div><div class="card-name">General Biology II</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('bio118')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 118</div><div class="card-name">Gen Biology Lab II</div><div class="tags"><span class="tag tag-cr">1 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem106')"><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 106</div><div class="card-name">General Chemistry II</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('engl133')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">ENGL 133</div><div class="card-name">English Composition II</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('math121')"><div class="card-stripe" style="background:var(--math)"></div><div class="card-body"><div class="card-code">MATH 121</div><div class="card-name">Stats &amp; Probability</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('gold')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GOLD</div><div class="card-name">GBD Gateway course</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+    </div>
+    <div id="bio108" class="panel"><div class="panel-title">BIO 108 — General Biology II</div><div class="panel-meta">3 cr · Spring only · Required</div><div class="panel-desc">Second semester of the two-semester introductory biology sequence. Focuses on phylogenetic relationships and structural/functional characteristics of the three life domains: Archaea, Bacteria, and Eukarya.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span></div></div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('bio118');event.stopPropagation()">BIO 118</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio312');event.stopPropagation()">BIO 312 (elective)</span><span class="chip" onclick="toggle('bio211');event.stopPropagation()">BIO 211 (elective)</span><span class="chip" onclick="toggle('bio240');event.stopPropagation()">BIO 240 (research)</span></div></div></div>
+    <div id="bio118" class="panel"><div class="panel-title">BIO 118 — General Biology Lab II</div><div class="panel-meta">1 cr · Spring only · Required</div><div class="panel-desc">Students examine the differences between various types of organisms and conduct inquiry-based experiments using an organismal model system. Also covers applicable terminology related to organismal biology.</div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio240');event.stopPropagation()">BIO 240 (research)</span></div></div></div>
+    <div id="chem106" class="panel"><div class="panel-title">CHEM 106 — General Chemistry II</div><div class="panel-meta">4 cr · Spring only · Required</div><div class="panel-desc">An extension of CHEM 105 covering properties of solutions, chemical equilibria, reaction kinetics, acid-base chemistry, thermodynamics, and electrochemistry. Lab exercises include use of instrumentation to monitor reactions and characterize compounds.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('chem105');event.stopPropagation()">CHEM 105 with C− min</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('chem209');event.stopPropagation()">CHEM 209 (C− min)</span><span class="chip" onclick="toggle('bio203');event.stopPropagation()">BIO 203 (elective)</span><span class="chip" onclick="toggle('bio240');event.stopPropagation()">BIO 240 (research)</span></div></div></div>
+    <div id="engl133" class="panel"><div class="panel-title">ENGL 133 — English Composition II</div><div class="panel-meta">3 cr</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('engl132');event.stopPropagation()">ENGL 132</span></div></div></div>
+    <div id="math121" class="panel"><div class="panel-title">MATH 121 — Introductory Probability &amp; Statistics</div><div class="panel-meta">3 cr · Required</div><div class="panel-desc">Introduction to descriptive and inferential statistics, probability, hypothesis testing, and data interpretation. Useful for research design and data analysis throughout the major.</div><p class="panel-note">No prerequisites listed. Can be taken in Y1 spring or later, but earlier is better for research and lab data analysis.</p></div>
+    <div id="gold" class="panel"><div class="panel-title">GOLD — GBD Gateway course</div><div class="panel-meta">3 cr · First-year only</div><p class="panel-note">No prerequisites. Also satisfies one GBD trail requirement.</p></div>
+  </div>
+</div>
+
+<!-- ═══════ YEAR 2 ═══════ -->
+<div class="yr-wrap">
+  <div class="yr-head"><span class="yr-label">Year 2</span><div class="yr-line"></div></div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Fall semester</span>
+      <span class="sem-cr">13 cr</span>
+      <span class="sem-badge fall-badge">Fall</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio213')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 213</div><div class="card-name">Ecology</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem209')"><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 209</div><div class="card-name">Organic Chemistry I</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem219')"><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 219</div><div class="card-name">Organic Chem Lab I</div><div class="tags"><span class="tag tag-cr">1 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('gbd-y2f')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GBD × 2</div><div class="card-name">Golden Bear Discovery</div><div class="tags"><span class="tag tag-cr">6 cr</span></div></div></div>
+    </div>
+    <div id="bio213" class="panel"><div class="panel-title">BIO 213 — Ecology</div><div class="panel-meta">3 cr · Fall only · Required</div><div class="panel-desc">Study of the interaction of plants and animals with the physical environment. Topics include population dynamics, food chains, energy flow, and adaptations.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span><span class="chip nc">Sophomore standing</span><span class="chip" onclick="toggle('chem105');event.stopPropagation()">CHEM 105 (concurrent ok)</span></div></div><p class="panel-note">The CHEM 105 requirement can be satisfied concurrently — however, since most students take CHEM 105 in Y1 fall, this prerequisite is typically met before Y2.</p></div>
+    <div id="chem209" class="panel"><div class="panel-title">CHEM 209 — Organic Chemistry I</div><div class="panel-meta">3 cr · Fall only · Required</div><div class="panel-desc">Introduction to basic principles of organic chemistry. Emphasizes functional group recognition, structure–property relationships, alkenes, alkynes, alkyl halides, stereochemistry, reaction mechanisms, and an introduction to IR and NMR spectroscopy.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('chem106');event.stopPropagation()">CHEM 106 with C− min</span></div></div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('chem219');event.stopPropagation()">CHEM 219</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('chem210');event.stopPropagation()">CHEM 210</span></div></div></div>
+    <div id="chem219" class="panel"><div class="panel-title">CHEM 219 — Organic Chemistry Lab I</div><div class="panel-meta">1 cr · Fall only · Required</div><div class="panel-desc">Laboratory for CHEM 209. Develops skills in planning, conducting, and interpreting organic chemistry experiments. Introduces synthetic organic chemistry techniques and characterization by chemical and instrumental methods.</div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('chem209');event.stopPropagation()">CHEM 209</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('chem210');event.stopPropagation()">CHEM 210</span></div></div></div>
+    <div id="gbd-y2f" class="panel"><div class="panel-title">GBD × 2 — Golden Bear Discovery courses</div><div class="panel-meta">6 cr (two courses)</div><p class="panel-note">Trail courses. No specific prerequisites for most sections. Three GBD courses required in total; one (GOLD) taken in Y1 spring. The sequence of GBD courses across Y2–Y3 is flexible.</p></div>
+  </div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Spring semester</span>
+      <span class="sem-cr">14 cr</span>
+      <span class="sem-badge spring-badge">Spring</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio201')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 201</div><div class="card-name">Plant Biology</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem210')"><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 210</div><div class="card-name">Organic Chemistry II</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem220')"><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 220</div><div class="card-name">Organic Chem Lab II</div><div class="tags"><span class="tag tag-cr">1 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('gbd-y2s')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GBD</div><div class="card-name">Golden Bear Discovery</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('wic2')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">WIC 2XX</div><div class="card-name">Writing Intensive</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-wic">WIC</span></div></div></div>
+    </div>
+    <div id="bio201" class="panel"><div class="panel-title">BIO 201 — Plant Biology</div><div class="panel-meta">4 cr · Spring only · Required (includes 3-hr lab)</div><div class="panel-desc">Students examine various kinds of plants including their structure, internal workings, ecological relationships, and evolution. Includes data collection, analysis, and interpretation. Three class hours and three-hour lab.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span><span class="chip nc">Sophomore standing</span></div></div></div>
+    <div id="chem210" class="panel"><div class="panel-title">CHEM 210 — Organic Chemistry II</div><div class="panel-meta">3 cr · Spring only · Required</div><div class="panel-desc">Continuation of CHEM 209. Covers alcohols, ethers, aromatics, carboxylic acids, aldehydes, and ketones. Emphasizes complex reaction mechanisms, synthesis design, and spectroscopic structure determination.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('chem209');event.stopPropagation()">CHEM 209</span><span class="chip" onclick="toggle('chem219');event.stopPropagation()">CHEM 219</span></div></div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('chem220');event.stopPropagation()">CHEM 220</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio306');event.stopPropagation()">BIO 306</span><span class="chip" onclick="toggle('bio310');event.stopPropagation()">BIO 310</span><span class="chip" onclick="toggle('bio320');event.stopPropagation()">BIO 320 (elective)</span></div></div></div>
+    <div id="chem220" class="panel"><div class="panel-title">CHEM 220 — Organic Chemistry Lab II</div><div class="panel-meta">1 cr · Spring only · Required</div><div class="panel-desc">Continuation of CHEM 219. Emphasis on synthesis and subsequent characterization and identification of organic compounds by chemical and instrumental methods. Four-hour lab.</div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('chem210');event.stopPropagation()">CHEM 210</span></div></div></div>
+    <div id="gbd-y2s" class="panel"><div class="panel-title">GBD — Golden Bear Discovery course</div><div class="panel-meta">3 cr</div><p class="panel-note">Trail course. No specific prerequisites for most sections.</p></div>
+    <div id="wic2" class="panel"><div class="panel-title">WIC 2XX — Writing Intensive course (200/300-level)</div><div class="panel-meta">3 cr</div><p class="panel-note">6 WIC credits required total: one at 200/300-level (this one), one at 300/400-level (Y3 spring). These can also satisfy GBD or major requirements.</p></div>
+  </div>
+</div>
+
+<!-- ═══════ YEAR 3 ═══════ -->
+<div class="yr-wrap">
+  <div class="yr-head"><span class="yr-label">Year 3</span><div class="yr-line"></div></div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Fall semester</span>
+      <span class="sem-cr">16–17 cr</span>
+      <span class="sem-badge fall-badge">Fall</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio306')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 306</div><div class="card-name">Genetics</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-warn">bottleneck</span></div></div></div>
+      <div class="card" onclick="toggle('bio-elec-y3f')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 2XX/4XX</div><div class="card-name">Biology Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('phys-y3')"><div class="card-stripe" style="background:var(--phys)"></div><div class="card-body"><div class="card-code">PHYS 123/110/101</div><div class="card-name">Physics I (choose one)</div><div class="tags"><span class="tag tag-cr">3–4 cr</span><span class="tag tag-opt">alt. option</span></div></div></div>
+      <div class="card" onclick="toggle('gbd-y3f')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GBD</div><div class="card-name">Golden Bear Discovery</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gen-y3f')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN 3XX</div><div class="card-name">Upper-level Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+    </div>
+    <div id="bio-elec-y3f" class="panel"><div class="panel-title">BIO 2XX/4XX — Biology Elective</div><div class="panel-meta">3 cr · Required (part of 7-cr BIO elective requirement)</div><p class="panel-note">Choose from BIO 200–400-level electives (see elective section below). HS 315, HS 320, and HS 412 also count toward this requirement. Prerequisites vary.</p></div>
+    <div id="phys-y3" class="panel"><div class="panel-title">Physics I — choose one option</div><div class="panel-meta">Required · 3–4 cr depending on choice</div><div class="panel-desc">PHYS 123 (4 cr, fall only): calculus-based mechanics, thermodynamics, and nuclear physics with medical applications. Requires MATH 123 or equivalent. Unlocks PHYS 124.
+
+PHYS 110 (3 cr, spring only): algebra-based physics applied to the human body — energy, forces, motion, electricity, sight, and sound. Two class hours and three-hour lab. Does not unlock PHYS 124.
+
+PHYS 101 (3 cr): conceptual survey of physics principles. No prerequisites.</div><div class="opt-box"><strong>PHYS 123</strong> (4 cr, Fall only) — Physics of Life Sciences I. Prereq: MATH 123 or 127 or 133. Calculus-based. Unlocks PHYS 124.<br><br><strong>PHYS 110</strong> (3 cr, Spring only) — Physics of the Human Body. No listed prerequisites. Algebra-based. Counts as first physics course if PHYS 123 not taken. Does not unlock PHYS 124 (which requires PHYS 123).<br><br><strong>PHYS 101</strong> (3 cr) — Elements of Physics. Conceptual survey. No listed prerequisites.</div><p class="panel-note">PHYS 123 is the recommended path for pre-med and pre-grad students. PHYS 110 or 101 are lower-intensity alternatives that still satisfy the requirement.</p></div>
+    <div id="gbd-y3f" class="panel"><div class="panel-title">GBD — Golden Bear Discovery course</div><div class="panel-meta">3 cr</div><p class="panel-note">Final GBD trail course (4th of the program's GBD requirements). No specific prerequisites for most sections.</p></div>
+    <div id="gen-y3f" class="panel"><div class="panel-title">GEN 3XX — Upper-level Elective</div><div class="panel-meta">3 cr (one course)</div><p class="panel-note">Must be 300-level or above. Prerequisites vary by course chosen.</p></div>
+  </div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Spring semester</span>
+      <span class="sem-cr">15–16 cr</span>
+      <span class="sem-badge spring-badge">Spring</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio310')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 310</div><div class="card-name">Cell Biology</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('phys-y3s')"><div class="card-stripe" style="background:var(--phys)"></div><div class="card-body"><div class="card-code">PHYS 124/15X</div><div class="card-name">Physics II (choose one)</div><div class="tags"><span class="tag tag-cr">3–4 cr</span><span class="tag tag-opt">alt. option</span></div></div></div>
+      <div class="card" onclick="toggle('gen-y3s-upper')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN 3XX</div><div class="card-name">Upper-level Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gen-y3s')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN XXX</div><div class="card-name">General Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('wic3')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">WIC 3XX</div><div class="card-name">Writing Intensive</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-wic">WIC</span></div></div></div>
+    </div>
+    <div id="bio310" class="panel"><div class="panel-title">BIO 310 — Cell Biology</div><div class="panel-meta">4 cr · Spring only · Required (includes lab)</div><div class="panel-desc">Students examine cellular structure and function including the molecular organization of cell organelles. Covers key concepts with written and oral communication components. Data collection, analysis, and interpretation are practiced in the laboratory.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span><span class="chip" onclick="toggle('chem210');event.stopPropagation()">CHEM 210</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('hs320');event.stopPropagation()">HS 320 (elective)</span></div></div></div>
+    <div id="bio306" class="panel"><div class="panel-title">BIO 306 — Genetics</div><div class="panel-meta">4 cr · Fall only · Required (includes 3-hr lab)</div><div class="panel-desc">A study of classical organismal heredity and its molecular basis. Topics include Mendelian principles, gene structure and function, and changes in genetic material. Three class hours and three-hour lab.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span><span class="chip" onclick="toggle('chem210');event.stopPropagation()">CHEM 210</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio455');event.stopPropagation()">BIO 455 (+ sr standing)</span><span class="chip" onclick="toggle('bio470');event.stopPropagation()">BIO 470 (capstone)</span><span class="chip" onclick="toggle('bio401');event.stopPropagation()">BIO 401 (elective)</span><span class="chip" onclick="toggle('hs412');event.stopPropagation()">HS 412 (elective)</span></div></div></div>
+    <div id="phys-y3s" class="panel"><div class="panel-title">Physics II — choose one option</div><div class="panel-meta">Required · 3–4 cr depending on choice</div><div class="panel-desc">PHYS 124 (4 cr, spring only): calculus-based electricity and magnetism, optics, and modern physics with life-science applications. Requires PHYS 123.
+
+PHYS 15X: an alternate physics elective for students who took PHYS 110 or 101 in lieu of PHYS 123.</div><div class="opt-box"><strong>PHYS 124</strong> (4 cr, Spring only) — Physics of Life Sciences II. Prereq: PHYS 123. Calculus-based. Must have taken PHYS 123 in Y3 fall.<br><br><strong>PHYS 15X</strong> (3 cr) — PHYS 15X elective (specific course varies). Satisfies the second physics requirement without needing PHYS 123 first.</div><p class="panel-note">If PHYS 123 was taken in Y3 fall, take PHYS 124 in Y3 spring. If PHYS 110 or 101 was taken instead, use a PHYS 15X elective here.</p></div>
+    <div id="gen-y3s-upper" class="panel"><div class="panel-title">GEN 3XX — Upper-level Elective</div><div class="panel-meta">3 cr (one course)</div><p class="panel-note">Must be 300-level or above. Prerequisites vary by course chosen. Moved here from Y3 fall to balance load after adding BIO 306 there.</p></div>
+    <div id="gen-y3s" class="panel"><div class="panel-title">GEN XXX — General Elective</div><div class="panel-meta">3 cr</div><p class="panel-note">No specific major prerequisites. Can be used to double-satisfy GBD or WIC requirements.</p></div>
+    <div id="wic3" class="panel"><div class="panel-title">WIC 3XX — Writing Intensive course (300/400-level)</div><div class="panel-meta">3 cr · Upper WIC requirement</div><p class="panel-note">Must be 300–400-level. Fulfills the upper Writing Intensive requirement. Can also count toward major electives or GBD if applicable.</p></div>
+  </div>
+</div>
+
+<!-- ═══════ YEAR 4 ═══════ -->
+<div class="yr-wrap">
+  <div class="yr-head"><span class="yr-label">Year 4</span><div class="yr-line"></div></div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Fall semester</span>
+      <span class="sem-cr">16 cr</span>
+      <span class="sem-badge fall-badge">Fall</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio401')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 401</div><div class="card-name">Molecular Biology</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-opt">elective</span></div></div></div>
+      <div class="card" onclick="toggle('gen-y4f')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN 3XX × 2</div><div class="card-name">Upper-level Electives</div><div class="tags"><span class="tag tag-cr">6 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gen-y4f2')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN XXX × 2</div><div class="card-name">General Electives</div><div class="tags"><span class="tag tag-cr">6 cr</span></div></div></div>
+    </div>
+    <div id="bio401" class="panel"><div class="panel-title">BIO 401 — Molecular Biology</div><div class="panel-meta">4 cr · Fall only · Counts toward BIO 2XX/4XX elective requirement</div><div class="panel-desc">Introduces the tools and techniques of molecular biology: isolating DNA, recombinant DNA techniques, gene recognition, DNA sequencing, and bioinformatics to compare genetic sequences.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio306');event.stopPropagation()">BIO 306</span></div></div><p class="panel-note">Not a required course — counts as one of the 7 cr of BIO 2XX/4XX electives. BIO 306 is Y3 fall; since BIO 401 is also fall only, it cannot be taken until Y4 fall at the earliest.</p></div>
+    <div id="gen-y4f" class="panel"><div class="panel-title">GEN 3XX — Upper-level Electives</div><div class="panel-meta">6 cr (two courses) · 300-level or above</div><p class="panel-note">Prerequisites vary by course chosen.</p></div>
+    <div id="gen-y4f2" class="panel"><div class="panel-title">GEN XXX — General Electives</div><div class="panel-meta">6 cr (two courses)</div><p class="panel-note">No major prerequisites.</p></div>
+  </div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Spring semester</span>
+      <span class="sem-cr">14 cr</span>
+      <span class="sem-badge spring-badge">Spring</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio455')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 455</div><div class="card-name">Evolution</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('bio470')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 470</div><div class="card-name">Seminar in Biology</div><div class="tags"><span class="tag tag-cr">1 cr</span><span class="tag tag-cap">capstone</span></div></div></div>
+      <div class="card" onclick="toggle('bio-elec-y4s')"><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 2XX/4XX</div><div class="card-name">Biology Elective</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('gen-y4s-upper')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN 3XX</div><div class="card-name">Upper-level Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+      <div class="card" onclick="toggle('gen-y4s-gen')"><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">GEN XXX</div><div class="card-name">General Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span></div></div></div>
+    </div>
+    <div id="bio455" class="panel"><div class="panel-title">BIO 455 — Evolution</div><div class="panel-meta">3 cr · Spring only · Required</div><div class="panel-desc">Study of organic evolution and its theoretical basis. Develops three major themes: the history of evolutionary thought, the mechanisms of evolution, and highlights in the history of life.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio306');event.stopPropagation()">BIO 306</span><span class="chip nc">Senior standing</span></div></div><p class="panel-note">Both BIO 306 and senior standing are required. This course cannot be taken until Y4 at the earliest even if BIO 306 is completed in Y3.</p></div>
+    <div id="bio470" class="panel"><div class="panel-title">BIO 470 — Seminar in Biology (Capstone)</div><div class="panel-meta">1 cr · Required capstone</div><div class="panel-desc">Capstone experience for biology majors. Students read, discuss, and present articles from the primary literature related to a particular theme in biology.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio306');event.stopPropagation()">BIO 306</span><span class="chip nc">or instructor permission</span></div></div><p class="panel-note">Primary literature seminar. The degree capstone. BIO 306 is the gate — any delay in Genetics cascades directly to graduation eligibility for this course and BIO 455.</p></div>
+    <div id="bio-elec-y4s" class="panel"><div class="panel-title">BIO 2XX/4XX — Biology Elective</div><div class="panel-meta">4 cr · Part of 7-cr BIO elective requirement</div><p class="panel-note">Combined with the 3-cr BIO elective in Y3 fall, this completes the 7-cr BIO elective requirement. Choose from BIO 200–400-level courses or HS 315, HS 320, HS 412 (see elective section below).</p></div>
+    <div id="gen-y4s-upper" class="panel"><div class="panel-title">GEN 3XX — Upper-level Elective</div><div class="panel-meta">3 cr · Must be 300-level or above</div><p class="panel-note">Prerequisites vary by course chosen.</p></div>
+    <div id="gen-y4s-gen" class="panel"><div class="panel-title">GEN XXX — General Elective</div><div class="panel-meta">3 cr</div><p class="panel-note">No major prerequisites.</p></div>
+  </div>
+</div>
+
+<!-- ═══════ BIO ELECTIVES ═══════ -->
+<div class="sec-head">BIO 2XX–4XX elective options</div>
+<p style="font-size:12px;color:var(--text-3);margin-bottom:12px;">7 credit hours required from BIO 2XX–4XX courses. HS 315, HS 320, and HS 412 also count. Suggested split: 3 cr in Y3 fall + 4 cr in Y4 spring.</p>
+
+<div class="elec-grid">
+  <div class="elec-card" onclick="toggle('bio203')"><div class="elec-stripe" style="background:var(--bio)"></div><div><div class="elec-code">BIO 203 · 4 cr</div><div class="elec-name">Microbiology · Spring only</div><div class="elec-prereq">Prereq: BIO 107+117, CHEM 106<br>Earliest: Y2 spring</div></div></div>
+  <div class="elec-card" onclick="toggle('bio211')"><div class="elec-stripe" style="background:var(--bio)"></div><div><div class="elec-code">BIO 211 · 3 cr</div><div class="elec-name">Animal Behavior · Fall only</div><div class="elec-prereq">Prereq: BIO 108 <br>Earliest: Y2 fall</div></div></div>
+  <div class="elec-card" onclick="toggle('bio312')"><div class="elec-stripe" style="background:var(--bio)"></div><div><div class="elec-code">BIO 312 · 3 cr</div><div class="elec-name">Developmental Biology</div><div class="elec-prereq">Prereq: BIO 108, CHEM 106, junior standing<br>Earliest: Y3</div></div></div>
+  <div class="elec-card" onclick="toggle('bio320')"><div class="elec-stripe" style="background:var(--bio)"></div><div><div class="elec-code">BIO 320 · 3 cr</div><div class="elec-name">Principles of Biochemistry · Spring only</div><div class="elec-prereq">Prereq: BIO 107, CHEM 210<br>Earliest: Y3 spring</div></div></div>
+  <div class="elec-card" onclick="toggle('bio401')"><div class="elec-stripe" style="background:var(--bio)"></div><div><div class="elec-code">BIO 401 · 4 cr</div><div class="elec-name">Molecular Biology · Fall only</div><div class="elec-prereq">Prereq: BIO 306<br>Earliest: Y4 fall (BIO 306 is Y3 fall)</div></div></div>
+  <div class="elec-card" onclick="toggle('bio240')"><div class="elec-stripe" style="background:var(--bio)"></div><div><div class="elec-code">BIO 240 · 1–3 cr</div><div class="elec-name">Research Projects in Biology</div><div class="elec-prereq">Prereq: CHEM 106, BIO 108+118, soph. standing, GPA ≥ 3.30, instructor permission</div></div></div>
+  <div class="elec-card" onclick="toggle('hs315')"><div class="elec-stripe" style="background:var(--phys)"></div><div><div class="elec-code">HS 315 · 3 cr</div><div class="elec-name">Protein Folding &amp; Disease</div><div class="elec-prereq">Prereq: BIO 216 or instructor permission<br>(BIO 216 not req'd in BIO major)</div></div></div>
+  <div class="elec-card" onclick="toggle('hs320')"><div class="elec-stripe" style="background:var(--phys)"></div><div><div class="elec-code">HS 320 · 3 cr</div><div class="elec-name">Regeneration</div><div class="elec-prereq">Prereq: BIO 107 (C−), and BIO 216 or BIO 310<br>Earliest: Y3 spring (after BIO 310)</div></div></div>
+  <div class="elec-card" onclick="toggle('hs412')"><div class="elec-stripe" style="background:var(--phys)"></div><div><div class="elec-code">HS 412 · 3 cr</div><div class="elec-name">Cancer Biology</div><div class="elec-prereq">Prereq: BIO 306 or instructor permission<br>Earliest: Y4 (after BIO 306)</div></div></div>
+</div>
+
+<div id="bio203" class="panel"><div class="panel-title">BIO 203 — Microbiology</div><div class="panel-meta">4 cr · Spring only</div><div class="panel-desc">Introduction to bacteria and viruses and the techniques for working with them, including isolation, identification, and enumeration. Three class hours and three lab hours.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span><span class="chip" onclick="toggle('chem106');event.stopPropagation()">CHEM 106</span></div></div></div>
+<div id="bio211" class="panel"><div class="panel-title">BIO 211 — Animal Behavior</div><div class="panel-meta">3 cr · Fall only</div><div class="panel-desc">Introduces students to the field of animal behavior. Examines basic principles from evolution, ecology, ethology, and development to explain how and why animals behave as they do. Covers foraging, communication, migration, mating, and parental care.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span></div></div></div>
+<div id="bio312" class="panel"><div class="panel-title">BIO 312 — Developmental Biology</div><div class="panel-meta">3 cr</div><div class="panel-desc">Students examine the embryonic development of animals and its genetic control. Covers major developmental processes and their molecular basis. Written and oral communication required.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span><span class="chip" onclick="toggle('chem106');event.stopPropagation()">CHEM 106</span><span class="chip nc">Junior standing</span></div></div></div>
+<div id="bio320" class="panel"><div class="panel-title">BIO 320 — Principles of Biochemistry</div><div class="panel-meta">3 cr · Spring only</div><div class="panel-desc">Lecture-based examination of the chemistry of biological systems with emphasis on human biochemistry. Topics include the biosynthesis, metabolism, and function of proteins, nucleic acids, carbohydrates, and lipids.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('chem210');event.stopPropagation()">CHEM 210</span></div></div><p class="panel-note">Lecture-only course; no lab. Covers human biochemistry — proteins, nucleic acids, carbohydrates, lipids. Not the same as CHEM 314.</p></div>
+<div id="bio240" class="panel"><div class="panel-title">BIO 240 — Research Projects in Biology</div><div class="panel-meta">1–3 cr · Repeatable</div><div class="panel-desc">Provides students with an opportunity to explore laboratory topics beyond normal coursework and develop good laboratory and research skills. Topic may be proposed by instructor or student; must be clearly defined and agreed upon by both.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('chem106');event.stopPropagation()">CHEM 106</span><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span><span class="chip" onclick="toggle('bio118');event.stopPropagation()">BIO 118</span><span class="chip nc">Soph. standing</span><span class="chip nc">GPA ≥ 3.30 in major</span><span class="chip nc">Instructor permission</span></div></div><p class="panel-note">Research laboratory experience. BIO 341 is the continuation. GPA threshold and instructor permission make this selective.</p></div>
+<div id="hs315" class="panel"><div class="panel-title">HS 315 — Protein Folding, Misfolding &amp; Disease</div><div class="panel-meta">3 cr · Counts as BIO 2XX/4XX elective</div><div class="panel-desc">Covers effects of alterations to folded protein structure due to environmental stress, genetic mutation, or infection. Examines prion diseases (mad cow disease, CJD, kuru) and other aggregation diseases including Alzheimer's, Parkinson's, Cystic Fibrosis, and cancer.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">BIO 216 or instructor permission</span></div></div><div class="warn-box">BIO 216 (A&amp;P II) is not part of the Biology major requirements — it is an HS major course. Biology majors would need instructor permission to enroll without BIO 216.</div></div>
+<div id="hs320" class="panel"><div class="panel-title">HS 320 — Regeneration</div><div class="panel-meta">3 cr · Counts as BIO 2XX/4XX elective</div><div class="panel-desc">Focuses on regeneration in mammals and progress in regenerative medicine for selected organ systems. The ability of organisms to repair and replace tissues is explored. Oral presentation and review paper required.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107 (C− min)</span><span class="chip" onclick="toggle('bio310');event.stopPropagation()">BIO 310</span><span class="chip nc">or BIO 216</span></div></div><p class="panel-note">BIO 310 is the practical prereq for Biology majors (BIO 216 is HS-track). Earliest: Y3 spring or later.</p></div>
+<div id="hs412" class="panel"><div class="panel-title">HS 412 — Cancer Biology</div><div class="panel-meta">3 cr · Counts as BIO 2XX/4XX elective</div><div class="panel-desc">Overview of the fundamentals of cancer biology and treatment. Topics include cancer as a genetic disease, oncogenes, familial cancer, signal transduction, cell cycle control, apoptosis, cancer metabolism, metastasis, and conventional and molecularly-targeted therapies.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio306');event.stopPropagation()">BIO 306 (or instructor permission)</span></div></div></div>
+
+<!-- ═══════ CRITICAL PATH ═══════ -->
+<div class="sec-head">Critical path &amp; advising notes</div>
+<ul class="note-list">
+  <li class="crit"><strong>CHEM chain is the longest bottleneck:</strong> CHEM 105 (Y1F) → CHEM 106 (Y1Sp, C− min) → CHEM 209 (Y2F, C− min) → CHEM 210 (Y2Sp). This chain also gates BIO 306 and BIO 310. Missing CHEM 105 in Y1 fall delays Organic Chemistry by a full year.</li>
+  <li><strong>Grade minimums on the CHEM chain:</strong> C− required for CHEM 105→106 and CHEM 106→209. No minimum is stated beyond those two transitions, though academic standing requirements apply overall.</li>
+  <li class="crit"><strong>BIO 306 (Genetics) is the central hub.</strong> It requires CHEM 210 (earliest: Y2 spring), so Y3 fall is the earliest it can be taken. It gates BIO 455 (+ senior standing), BIO 470 (capstone), BIO 401 (elective), and HS 412 (elective). Any delay cascades to graduation.</li>
+  <li><strong>BIO 306 is placed in Y3 fall</strong> — consistent with the course description (fall only). This gives one full semester of Genetics before BIO 455 and BIO 470 in Y4 spring, and positions BIO 401 cleanly in Y4 fall.</li>
+  <li><strong>BIO 455 requires senior standing</strong> in addition to BIO 306. Even if BIO 306 is complete, BIO 455 cannot be taken until Y4. It is spring only — so Y4 spring is the only viable slot in a standard four-year plan.</li>
+  <li><strong>MATH 109 vs MATH 123:</strong> Students who place into Precalculus must take MATH 109 first, adding one semester before MATH 123 is available. This delays PHYS 123 by a year if PHYS 123 is the chosen physics option — pushing it to Y4 or requiring the PHYS 110/101 alternative instead.</li>
+  <li><strong>PHYS options matter for pre-med:</strong> PHYS 123+124 (calculus-based) is strongly recommended for students intending medical school or graduate programs. Contact the pre-med advisor or department chair for guidance on the full pre-med sequence.</li>
+  <li><strong>HS 315 access for Biology majors:</strong> HS 315 (Protein Folding) lists BIO 216 as a prerequisite — a course not required in the Biology major. Biology students who want this elective will need instructor permission.</li>
+  <li><strong>BIO 240 (Research Projects) has a GPA threshold:</strong> a minimum 3.30 in-major GPA is required, plus instructor permission. It is not available to all students.</li>
+  <li><strong>Major GPA:</strong> 2.0 minimum across all BIO courses (excl. BIO 15X and BIO 19X), and CHEM 105/106/209/210/219/220, and HS 315/320/412 if taken as part of the degree. Total program: 120 cr. Major core: 62–64 cr. Writing Intensive: 6 cr required. No transfer credit for major-level science lab courses taught online.</li>
+</ul>
+
+</div>
+<script>
+function toggle(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var wasOpen = el.classList.contains('show');
+  document.querySelectorAll('.panel.show').forEach(function(p) { p.classList.remove('show'); });
+  document.querySelectorAll('.card.active, .elec-card.active').forEach(function(c) { c.classList.remove('active'); });
+  if (!wasOpen) {
+    el.classList.add('show');
+    var card = el.previousElementSibling;
+    while (card && !card.classList.contains('card') && !card.classList.contains('elec-card')) {
+      card = card.previousElementSibling;
+    }
+    if (card) card.classList.add('active');
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+</script>
+</body>
+</html>
