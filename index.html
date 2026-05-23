@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WNE Course Course Sequence Flowcharts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f6f2;
+  --surface: #ffffff;
+  --border: rgba(0,0,0,0.09);
+  --border-med: rgba(0,0,0,0.16);
+  --text: #1a1916;
+  --text-2: #6b6860;
+  --text-3: #9c9a92;
+  --bio: #5b50c8;
+  --hs: #a66810;
+  --hst: #178c60;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 40px 48px 36px; }
+.header-eyebrow { font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 10px; }
+header h1 { font-size: 26px; font-weight: 500; letter-spacing: -0.02em; color: var(--text); margin-bottom: 8px; }
+header p { font-size: 14px; color: var(--text-2); max-width: 560px; line-height: 1.6; }
+
+main { flex: 1; max-width: 900px; width: 100%; margin: 0 auto; padding: 48px 48px 80px; }
+
+.section-label { font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ── Program cards grid ── */
+.prog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 56px; }
+
+.prog-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: border-color .15s, box-shadow .15s;
+}
+.prog-card:hover { border-color: var(--border-med); box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+.prog-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.prog-card.bio::before  { background: var(--bio); }
+.prog-card.hsci::before { background: var(--hs); }
+.prog-card.hst::before  { background: var(--hst); }
+
+.card-body { padding: 22px 24px 18px; flex: 1; display: flex; flex-direction: column; }
+.card-tag { font-size: 10px; font-family: 'DM Mono', monospace; font-weight: 500; padding: 2px 7px; border-radius: 20px; width: fit-content; margin-bottom: 14px; }
+.bio  .card-tag { background: #eeedfe; color: #3c3489; }
+.hsci .card-tag { background: #faeeda; color: #633806; }
+.hst  .card-tag { background: #e1f5ee; color: #085041; }
+.card-title { font-size: 16px; font-weight: 500; letter-spacing: -0.01em; color: var(--text); margin-bottom: 6px; }
+.card-sub { font-size: 12px; color: var(--text-3); font-family: 'DM Mono', monospace; margin-bottom: 12px; }
+.card-desc { font-size: 12px; color: var(--text-2); line-height: 1.55; flex: 1; }
+
+/* ── Card buttons ── */
+.card-btns {
+  padding: 14px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+.card-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--border-med);
+  background: var(--surface);
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+  transition: background .12s, color .12s, border-color .12s;
+}
+.card-btn:hover { color: var(--text); border-color: rgba(0,0,0,0.25); background: var(--surface); }
+.card-btn.primary {
+  color: var(--surface);
+  border-color: transparent;
+}
+.bio  .card-btn.primary { background: var(--bio); }
+.bio  .card-btn.primary:hover { background: #4a40b0; }
+.hsci .card-btn.primary { background: var(--hs); }
+.hsci .card-btn.primary:hover { background: #7d4e0c; }
+.hst  .card-btn.primary { background: var(--hst); }
+.hst  .card-btn.primary:hover { background: #0d5a3e; }
+.card-btn svg { flex-shrink: 0; opacity: 0.7; }
+.card-btn.primary svg { opacity: 0.9; }
+
+/* ── How to use ── */
+.how-to { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; }
+.how-to h2 { font-size: 14px; font-weight: 500; margin-bottom: 14px; color: var(--text); }
+.steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+.step { display: flex; gap: 11px; align-items: flex-start; }
+.step-num { width: 20px; height: 20px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border-med); font-size: 10px; font-family: 'DM Mono', monospace; font-weight: 500; color: var(--text-3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.step p { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+
+footer { border-top: 1px solid var(--border); padding: 20px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+footer p { font-size: 11px; color: var(--text-3); font-family: 'DM Mono', monospace; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">Western New England University · College of Arts &amp; Sciences</div>
+  <h1>Course Maps &amp; Advising Worksheets</h1>
+  <p>Interactive four-year course sequence guides and advising audit trackers for the Physical &amp; Biological Sciences programs.</p>
+</header>
+
+<main>
+
+  <div class="section-label">Programs</div>
+
+  <div class="prog-grid">
+
+    <!-- ── Biology ── -->
+    <div class="prog-card bio">
+      <div class="card-body">
+        <span class="card-tag">BIO.BS</span>
+        <div class="card-title">BS in Biology</div>
+        <div class="card-sub">120 cr · 4 years</div>
+        <div class="card-desc">Cell biology, genetics, ecology, and evolution. Includes calculus-based physics options and a 7-credit upper-level biology elective requirement.</div>
+      </div>
+      <div class="card-btns">
+        <a href="bio_flowchart.html" class="card-btn">
+          Course Sequence Flowchart
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3L11 6.5 7.5 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="Biology - Audit Tracker.html" class="card-btn primary">
+          Biology Curriculum Worksheet
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3L11 6.5 7.5 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── Health Sciences ── -->
+    <div class="prog-card hsci">
+      <div class="card-body">
+        <span class="card-tag">HS.BS</span>
+        <div class="card-title">BS in Health Sciences</div>
+        <div class="card-sub">120 cr · 4 years</div>
+        <div class="card-desc">Anatomy &amp; physiology, organic chemistry, biochemistry, and psychology. Designed for students pursuing pre-med, pre-dental, pre-pharmacy, or allied health careers.</div>
+      </div>
+      <div class="card-btns">
+        <a href="hsci_flowchart.html" class="card-btn">
+          Course Sequence Flowchart
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3L11 6.5 7.5 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="Health Sciences - Audit Tracker.html" class="card-btn primary">
+          Health Sciences Curriculum Worksheet
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3L11 6.5 7.5 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── Health Studies ── -->
+    <div class="prog-card hst">
+      <div class="card-body">
+        <span class="card-tag">HST.BS</span>
+        <div class="card-title">BS in Health Studies</div>
+        <div class="card-sub">120 cr · 4 years</div>
+        <div class="card-desc">Social, psychological, and public health perspectives on healthcare. Designed for students pursuing occupational therapy, physical therapy, public health, nursing, or patient advocacy.</div>
+      </div>
+      <div class="card-btns">
+        <a href="hst_flowchart.html" class="card-btn">
+          Course Sequence Flowchart
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3L11 6.5 7.5 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="Health Studies - Audit Tracker.html" class="card-btn primary">
+          Health Studies Curriculum Worksheet
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7.5 3L11 6.5 7.5 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label">How to use these resources</div>
+
+  <div class="how-to">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <p><strong>Course Sequence Flowchart</strong> — reference flowchart. Click any course to see prerequisites, corequisites, and which courses it unlocks.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <p><strong>Curriculum Worksheet</strong> — advising audit tracker. Enter a student's name, toggle completed courses, track electives and GBD requirements, and save a personalized file.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <p>Tags on course tiles show fall/spring availability, WIC status, and prerequisite bottlenecks. Scroll to the bottom of each map for critical path advising notes.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <p>In the Curriculum Worksheet, use <strong>⬇ Save Advisee File</strong> to download a fully populated copy for each student — no account or server required.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>AY 2025–26 · Western New England University Catalog</p>
+  <p>Physical &amp; Biological Sciences · College of Arts &amp; Sciences</p>
+</footer>
+
+</body>
+</html>
