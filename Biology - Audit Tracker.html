@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BS Biology — Advising Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f6f2;
+  --surface: #ffffff;
+  --surface2: #f0efe9;
+  --border: rgba(0,0,0,0.09);
+  --border-med: rgba(0,0,0,0.16);
+  --text: #1a1916;
+  --text-2: #6b6860;
+  --text-3: #9c9a92;
+  --bio: #5b50c8;
+  --chem: #2b7fd4;
+  --phys: #178c60;
+  --math: #178c60;
+  --gen: #7a7870;
+  --warn-bg: #fcebeb;
+  --warn-border: #f09595;
+  --warn-text: #791f1f;
+  --cap-bg: #faece7;
+  --cap-text: #712b13;
+  --wic-bg: #fbeaf0;
+  --wic-text: #72243e;
+  --fall-bg: #eeedfe;
+  --fall-text: #3c3489;
+  --spring-bg: #e1f5ee;
+  --spring-text: #085041;
+  --opt-bg: #faeeda;
+  --opt-text: #633806;
+  --accent: #d4501a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; min-height: 100vh; }
+
+/* Page header */
+.page-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 26px 40px 20px; position: sticky; top: 0; z-index: 100; }
+.page-header h1 { font-size: 17px; font-weight: 500; letter-spacing: -0.01em; }
+.page-header p { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; align-items: center; }
+.meta-item { font-size: 11px; color: var(--text-2); display: flex; align-items: center; gap: 5px; }
+.meta-dot { width: 7px; height: 7px; border-radius: 1.5px; flex-shrink: 0; }
+.meta-sep { width: 1px; height: 14px; background: var(--border-med); }
+.leg-tag { font-size: 10px; font-family: 'DM Mono', monospace; padding: 1px 5px; border-radius: 3px; font-weight: 500; }
+
+/* Main */
+.main { max-width: 900px; margin: 0 auto; padding: 36px 40px 80px; }
+
+/* Year bands */
+.yr-wrap { margin-bottom: 40px; }
+.yr-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.yr-label { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); font-family: 'DM Mono', monospace; }
+.yr-line { flex: 1; height: 1px; background: var(--border); }
+
+/* Semesters */
+.sem { margin-bottom: 20px; }
+.sem-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.sem-title { font-size: 12px; font-weight: 500; color: var(--text-2); }
+.sem-cr { font-size: 11px; color: var(--text-3); font-family: 'DM Mono', monospace; }
+.sem-badge { font-size: 10px; font-weight: 500; font-family: 'DM Mono', monospace; padding: 2px 7px; border-radius: 20px; }
+.fall-badge { background: var(--fall-bg); color: var(--fall-text); }
+.spring-badge { background: var(--spring-bg); color: var(--spring-text); }
+
+/* Card grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 7px; }
+
+/* Course card */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 11px 10px 0; cursor: pointer; transition: border-color .12s, box-shadow .12s; display: flex; user-select: none; }
+.card:hover { border-color: var(--border-med); box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.card.active { border-color: rgba(0,0,0,0.25); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+.card-stripe { width: 3px; border-radius: 0 2px 2px 0; flex-shrink: 0; margin-right: 9px; align-self: stretch; min-height: 52px; }
+.card-body { flex: 1; min-width: 0; }
+.card-code { font-size: 12px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--text); margin-bottom: 2px; }
+.card-name { font-size: 11px; color: var(--text-2); margin-bottom: 6px; line-height: 1.3; }
+.tags { display: flex; flex-wrap: wrap; gap: 3px; }
+.tag { font-size: 9px; font-family: 'DM Mono', monospace; font-weight: 500; padding: 1px 5px; border-radius: 3px; white-space: nowrap; }
+.tag-cr   { background: #f1efe8; color: #5f5e5a; }
+.tag-fo   { background: var(--fall-bg); color: var(--fall-text); }
+.tag-so   { background: var(--spring-bg); color: var(--spring-text); }
+.tag-wic  { background: var(--wic-bg); color: var(--wic-text); }
+.tag-cap  { background: var(--cap-bg); color: var(--cap-text); }
+.tag-warn { background: var(--warn-bg); color: var(--warn-text); border: 1px solid var(--warn-border); }
+.tag-opt  { background: var(--opt-bg); color: var(--opt-text); }
+.tag-req  { background: #eeedfe; color: #3c3489; }
+
+/* Detail panel */
+.panel { background: var(--surface); border: 1px solid var(--border-med); border-radius: 10px; padding: 14px 16px; margin-top: 8px; display: none; animation: slideDown .15s ease; }
+.panel.show { display: block; }
+@keyframes slideDown { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+.panel-desc {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.55;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.panel-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.panel-meta { font-size: 11px; color: var(--text-3); font-family: 'DM Mono', monospace; margin-bottom: 10px; }
+.panel-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 7px; flex-wrap: wrap; }
+.panel-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; padding-top: 3px; flex-shrink: 0; min-width: 56px; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip { font-size: 11px; font-family: 'DM Mono', monospace; padding: 2px 8px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border-med); color: var(--text); cursor: pointer; transition: background .1s; white-space: nowrap; }
+.chip:hover { background: #eeedfe; }
+.chip.co { border-style: dashed; background: transparent; }
+.chip.co:hover { background: var(--surface2); }
+.chip.nc { cursor: default; }
+.chip.nc:hover { background: var(--surface2); }
+.panel-note { font-size: 11px; color: var(--text-3); margin-top: 8px; line-height: 1.5; font-style: italic; }
+.warn-box { margin-top: 10px; background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: 6px; padding: 8px 11px; font-size: 11px; color: var(--warn-text); line-height: 1.5; }
+.opt-box { margin-top: 10px; background: var(--opt-bg); border: 1px solid #f0c97a; border-radius: 6px; padding: 8px 11px; font-size: 11px; color: var(--opt-text); line-height: 1.5; }
+
+/* Section headings */
+.sec-head { font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); font-family: 'DM Mono', monospace; margin: 36px 0 12px; display: flex; align-items: center; gap: 10px; }
+.sec-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* Elective grid */
+.elec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 7px; margin-top: 10px; }
+.elec-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 10px 0; display: flex; cursor: pointer; transition: border-color .12s; }
+.elec-card:hover { border-color: var(--border-med); }
+.elec-stripe { width: 3px; border-radius: 0 2px 2px 0; flex-shrink: 0; margin-right: 10px; align-self: stretch; min-height: 48px; }
+.elec-code { font-size: 11px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--text); }
+.elec-name { font-size: 11px; color: var(--text-2); margin: 2px 0 4px; line-height: 1.3; }
+.elec-prereq { font-size: 10px; color: var(--text-3); line-height: 1.4; }
+
+/* Notes */
+.note-list { list-style: none; }
+.note-list li { font-size: 12px; color: var(--text-2); padding: 8px 0 8px 16px; border-bottom: 1px solid var(--border); position: relative; line-height: 1.5; }
+.note-list li::before { content: ''; position: absolute; left: 0; top: 14px; width: 5px; height: 5px; border-radius: 50%; background: var(--border-med); }
+.note-list li.crit { color: var(--warn-text); }
+.note-list li.crit::before { background: var(--accent); }
+.note-list li strong { font-weight: 500; color: var(--text); }
+.note-list li.crit strong { color: var(--warn-text); }
+
+/* Option label for PHYS/MATH alternatives */
+.or-label { font-size: 10px; color: var(--text-3); font-style: italic; margin: 3px 0 3px 12px; }
+
+@media print { .page-header { position: static; } .panel { display: block !important; border: none; background: none; padding: 6px 0; } .card { break-inside: avoid; } }
+
+/* ── Advisee bar ─────────────────────────────────────────── */
+.advisee-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.advisee-label {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+.advisee-input {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  border: none;
+  border-bottom: 1.5px solid var(--border-med);
+  background: transparent;
+  padding: 2px 4px;
+  width: 280px;
+  outline: none;
+  transition: border-color .15s;
+}
+.advisee-input:focus { border-color: var(--bio); }
+.advisee-input::placeholder { color: var(--text-3); font-weight: 400; }
+.advisee-actions { display: flex; gap: 8px; margin-left: auto; }
+.btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-med);
+  background: var(--surface);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background .12s, color .12s, border-color .12s;
+  white-space: nowrap;
+}
+.btn:hover { background: var(--surface2); color: var(--text); }
+.btn.btn-danger { color: #791f1f; border-color: #f09595; }
+.btn.btn-danger:hover { background: #fcebeb; }
+.save-indicator {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-3);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.save-indicator.show { opacity: 1; }
+
+/* ── Progress bar ────────────────────────────────────────── */
+.progress-bar-wrap {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 40px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.progress-bar-track {
+  flex: 1;
+  height: 5px;
+  background: var(--surface2);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--bio);
+  border-radius: 99px;
+  transition: width .35s ease;
+}
+.progress-label {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-3);
+  white-space: nowrap;
+  min-width: 90px;
+  text-align: right;
+}
+
+/* ── Completed card state ────────────────────────────────── */
+.card.done { opacity: 0.42; }
+.card.done .card-stripe { opacity: 0.4; }
+.card.done .card-code { text-decoration: line-through; text-decoration-color: var(--text-3); }
+.card.done .card-name { color: var(--text-3); }
+
+/* ── Check button ────────────────────────────────────────── */
+.check-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-med);
+  background: var(--surface);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .12s, border-color .12s;
+  z-index: 2;
+  flex-shrink: 0;
+  padding: 0;
+}
+.check-btn:hover { border-color: #1D9E75; background: #e1f5ee; }
+.check-btn svg { display: none; }
+.card.done .check-btn { background: #1D9E75; border-color: #1D9E75; }
+.card.done .check-btn svg { display: block; }
+.card.done .check-btn:hover { background: #145f46; border-color: #145f46; }
+.card { position: relative; }
+
+/* ── Elective card done state ────────────────────────────── */
+.elec-card.done { opacity: 0.42; }
+.elec-card.done .elec-code { text-decoration: line-through; text-decoration-color: var(--text-3); }
+.elec-card.done .elec-name { color: var(--text-3); }
+.elec-card { position: relative; }
+
+@media print {
+  .advisee-actions { display: none; }
+  .advisee-bar { position: static; border-bottom: 1px solid #ccc; }
+  .progress-bar-wrap { position: static; }
+  .page-header { position: static; }
+  .card.done { opacity: 0.3; }
+  .check-btn { display: none; }
+  .panel { display: none !important; }
+  body { background: white; }
+}
+
+
+.section-block { margin-bottom: 40px; }
+.section-block-head { margin-bottom: 16px; }
+.section-block-title {
+  font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--text-3); font-family: 'DM Mono', monospace;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+}
+.section-block-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.section-block-meta { font-size: 12px; color: var(--text-2); line-height: 1.55; max-width: 760px; }
+.elec-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.elec-table-header {
+  display: grid; grid-template-columns: 120px 1fr 70px 60px;
+  padding: 8px 14px; background: var(--surface2); border-bottom: 1px solid var(--border);
+  font-size: 10px; font-family: 'DM Mono', monospace; font-weight: 500;
+  color: var(--text-3); text-transform: uppercase; letter-spacing: .05em;
+}
+.elec-row { display: grid; grid-template-columns: 120px 1fr 70px 60px; border-bottom: 1px solid var(--border); align-items: center; }
+.elec-row:last-child { border-bottom: none; }
+.elec-cell { padding: 5px 8px; border-right: 1px solid var(--border); }
+.elec-cell:last-child { border-right: none; }
+.elec-cell input { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--text); border: none; background: transparent; outline: none; padding: 2px 0; }
+.elec-cell input::placeholder { color: var(--text-3); }
+.elec-cell input:focus { background: #f8f7f2; }
+.elec-cell.center { text-align: center; display: flex; align-items: center; justify-content: center; }
+.elec-wic-check {
+  width: 16px; height: 16px; border-radius: 3px; border: 1.5px solid var(--border-med);
+  background: var(--surface); cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .1s, border-color .1s; padding: 0;
+}
+.elec-wic-check:hover { border-color: var(--wic-text); }
+.elec-wic-check.checked { background: var(--wic-text); border-color: var(--wic-text); }
+.elec-wic-check svg { display: none; }
+.elec-wic-check.checked svg { display: block; }
+.elec-table-footer {
+  display: flex; align-items: center; gap: 6px; padding: 8px 14px;
+  background: var(--surface2); border-top: 1px solid var(--border); font-size: 12px;
+}
+.elec-total-label { color: var(--text-3); font-family: 'DM Mono', monospace; font-size: 11px; }
+.elec-total-val { font-size: 14px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--text); min-width: 24px; }
+.elec-total-sep { color: var(--text-3); font-family: 'DM Mono', monospace; }
+.elec-total-req { color: var(--text-2); font-size: 12px; }
+.gbd-stage-label { font-size: 12px; font-weight: 500; color: var(--text-2); margin: 20px 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+.gbd-group-label { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text-3); margin: 12px 0 7px; display: flex; align-items: center; gap: 8px; }
+.gbd-group-req { font-size: 10px; color: var(--text-3); font-style: italic; font-family: 'DM Sans', sans-serif; }
+.gbd-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 7px; margin-bottom: 4px; }
+.gbd-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 11px; position: relative; transition: border-color .12s; }
+.gbd-card.done { opacity: 0.45; }
+.gbd-card.done .gbd-card-code { text-decoration: line-through; text-decoration-color: var(--text-3); }
+.gbd-card-code { font-size: 11px; font-weight: 500; font-family: 'DM Mono', monospace; color: var(--text); margin-bottom: 3px; padding-right: 24px; }
+.gbd-card-name { font-size: 11px; color: var(--text-2); line-height: 1.3; margin-bottom: 4px; }
+.gbd-card-cr { font-size: 10px; color: var(--text-3); margin-bottom: 7px; line-height: 1.3; }
+.gbd-course-input { width: 100%; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text); border: none; border-bottom: 1px solid var(--border-med); background: transparent; outline: none; padding: 2px 0; transition: border-color .15s; }
+.gbd-course-input:focus { border-color: var(--bio); }
+.gbd-course-input::placeholder { color: var(--text-3); }
+.gbd-course-entry { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text-3); padding-top: 2px; }
+.fixed-course { font-style: italic; }
+.gbd-check { position: absolute; top: 8px; right: 8px; }
+.btn.btn-save { background: var(--bio); color: #fff; border-color: var(--bio); font-weight: 500; }
+.btn.btn-save:hover { background: #4a40b0; border-color: #4a40b0; color: #fff; }
+
+</style>
+</head>
+<body>
+
+
+<div class="advisee-bar">
+  <span class="advisee-label">Advisee</span>
+  <input class="advisee-input" id="advisee-name" type="text" placeholder="Enter student name…" autocomplete="off" spellcheck="false">
+  <div class="advisee-actions">
+    <span class="save-indicator" id="save-indicator">Saved ✓</span>
+    <button class="btn btn-save" onclick="saveAdviseeFile()" title="Download a fully self-contained copy with all current data baked in">⬇ Save Advisee File</button><button class="btn" onclick="printMap()">Print / Save PDF</button>
+    <button class="btn btn-danger" onclick="resetAll()">Reset all</button>
+  </div>
+</div>
+<div class="progress-bar-wrap">
+  <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="progress-label" id="progress-label">0 of 0 completed</div>
+</div>
+
+<div class="page-header">
+  <h1>BS Biology — Course Prerequisite Map</h1>
+  <p>Western New England University · AY 2025–26 · BS in Biology · Click any course to expand · Use ✓ to mark completed courses</p>
+  <div class="meta">
+    <div class="meta-item"><div class="meta-dot" style="background:var(--bio)"></div>Biology</div>
+    <div class="meta-item"><div class="meta-dot" style="background:var(--chem)"></div>Chemistry</div>
+    <div class="meta-item"><div class="meta-dot" style="background:var(--phys)"></div>Physics / Math</div>
+    <div class="meta-item"><div class="meta-dot" style="background:var(--gen)"></div>Gen-ed / other</div>
+    <div class="meta-sep"></div>
+    <div class="meta-item"><span class="leg-tag tag-fo">fall only</span></div>
+    <div class="meta-item"><span class="leg-tag tag-so">spring only</span></div>
+    <div class="meta-item"><span class="leg-tag tag-opt">alt. option</span> Multiple choices exist</div>
+    <div class="meta-item"><span class="leg-tag tag-req">required</span></div>
+    <div class="meta-item"><span class="leg-tag tag-wic">WIC</span> Writing Intensive</div>
+    <div class="meta-item"><span class="leg-tag tag-cap">capstone</span></div>
+    <div class="meta-item"><span class="leg-tag tag-warn">bottleneck</span></div>
+    <div class="meta-sep"></div>
+    <div class="meta-item">Solid chip = prereq · Dashed chip = corequisite</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════ YEAR 1 ═══════ -->
+<div class="yr-wrap">
+  <div class="yr-head"><span class="yr-label">Year 1</span><div class="yr-line"></div></div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Fall semester</span>
+      <span class="sem-badge fall-badge">Fall</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio107')"><button class="check-btn" onclick="markDone('bio107');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 107</div><div class="card-name">General Biology I</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('bio117')"><button class="check-btn" onclick="markDone('bio117');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 117</div><div class="card-name">Gen Biology Lab I</div><div class="tags"><span class="tag tag-cr">1 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem105')"><button class="check-btn" onclick="markDone('chem105');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 105</div><div class="card-name">General Chemistry I</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('math-y1')"><button class="check-btn" onclick="markDone('math-y1');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--phys)"></div><div class="card-body"><div class="card-code">MATH 109/123</div><div class="card-name">Precalculus or Calc I</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-opt">alt. option</span></div></div></div>
+      <div class="card" onclick="toggle('blue101')"><button class="check-btn" onclick="markDone('blue101');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">BLUE 101</div><div class="card-name">First-Year Seminar</div><div class="tags"><span class="tag tag-cr">1 cr</span></div></div></div>
+      <div class="card" onclick="toggle('engl132')"><button class="check-btn" onclick="markDone('engl132');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">ENGL 132</div><div class="card-name">English Composition I</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-req">required</span></div></div></div>
+    </div>
+    <div id="bio107" class="panel"><div class="panel-title">BIO 107 — General Biology I</div><div class="panel-meta">3 cr · Fall only · Required</div><div class="panel-desc">Intended for science majors, this course focuses on introductory cellular and molecular biology. Concepts include cellular biochemistry, metabolism, and genetics.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">1 unit HS chemistry</span></div></div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span><span class="chip" onclick="toggle('bio118');event.stopPropagation()">BIO 118</span><span class="chip" onclick="toggle('bio213');event.stopPropagation()">BIO 213</span><span class="chip" onclick="toggle('bio201');event.stopPropagation()">BIO 201</span><span class="chip" onclick="toggle('bio306');event.stopPropagation()">BIO 306</span></div></div></div>
+    <div id="bio117" class="panel"><div class="panel-title">BIO 117 — General Biology Lab I</div><div class="panel-meta">1 cr · Fall only · Required</div><div class="panel-desc">Students apply scientific thinking and basic technical skills to the study of cells. Methods include microscopy, spectroscopy, and chromatography, as well as the collection, graphing, and interpretation of data.</div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span><span class="chip" onclick="toggle('bio213');event.stopPropagation()">BIO 213</span><span class="chip" onclick="toggle('bio201');event.stopPropagation()">BIO 201</span><span class="chip" onclick="toggle('bio306');event.stopPropagation()">BIO 306</span><span class="chip" onclick="toggle('bio310');event.stopPropagation()">BIO 310</span></div></div></div>
+    <div id="chem105" class="panel"><div class="panel-title">CHEM 105 — General Chemistry I</div><div class="panel-meta">4 cr · Required</div><div class="panel-desc">First course of a two-semester sequence for science and engineering majors. Topics include stoichiometry, states of matter, chemical reactions and energy, atomic structure, periodic trends, and chemical bonding. Lab experiments develop basic chemistry skills.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">1 unit HS chemistry</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('chem106');event.stopPropagation()">CHEM 106 (C− min)</span><span class="chip" onclick="toggle('bio213');event.stopPropagation()">BIO 213 (concurrent ok)</span></div></div></div>
+    <div id="math-y1" class="panel"><div class="panel-title">MATH 109 or MATH 123 — Precalculus / Calculus I</div><div class="panel-meta">3 cr · Choose based on placement</div><div class="panel-desc">MATH 109 (Precalculus) covers algebraic, exponential, and trigonometric functions — no prerequisites. MATH 123 (Calculus I) covers differential calculus with life-science applications — requires placement. Take MATH 123 directly if placed.</div><div class="opt-box"><strong>MATH 109 (Precalculus):</strong> No prerequisites. Required if not placed into calculus. Unlocks MATH 123 (and from there PHYS 123).<br><br><strong>MATH 123 (Calculus I):</strong> Requires placement. Skip MATH 109. Unlocks PHYS 123 directly.</div><div class="panel-row" style="margin-top:10px"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('phys-y3');event.stopPropagation()">PHYS 123 (via MATH 123)</span></div></div></div>
+    <div id="blue101" class="panel"><div class="panel-title">BLUE 101 — First-Year Seminar</div><div class="panel-meta">1 cr · First semester only</div><p class="panel-note">No prerequisites. Required of all first-semester students.</p></div>
+    <div id="engl132" class="panel"><div class="panel-title">ENGL 132 — English Composition I</div><div class="panel-meta">3 cr · Required</div><div class="panel-desc">Foundational academic writing course. Develops research, argumentation, and composition skills, including analytic reading of literary texts in cultural context.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip nc">Placement</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('engl133');event.stopPropagation()">ENGL 133</span></div></div></div>
+  </div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Spring semester</span>
+      <span class="sem-badge spring-badge">Spring</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio108')"><button class="check-btn" onclick="markDone('bio108');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 108</div><div class="card-name">General Biology II</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('bio118')"><button class="check-btn" onclick="markDone('bio118');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 118</div><div class="card-name">Gen Biology Lab II</div><div class="tags"><span class="tag tag-cr">1 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem106')"><button class="check-btn" onclick="markDone('chem106');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 106</div><div class="card-name">General Chemistry II</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('engl133')"><button class="check-btn" onclick="markDone('engl133');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--gen)"></div><div class="card-body"><div class="card-code">ENGL 133</div><div class="card-name">English Composition II</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('math121')"><button class="check-btn" onclick="markDone('math121');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--phys)"></div><div class="card-body"><div class="card-code">MATH 121</div><div class="card-name">Stats &amp; Probability</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-req">required</span></div></div></div>
+    </div>
+    <div id="bio108" class="panel"><div class="panel-title">BIO 108 — General Biology II</div><div class="panel-meta">3 cr · Spring only · Required</div><div class="panel-desc">Second semester of the two-semester introductory biology sequence. Focuses on phylogenetic relationships and structural/functional characteristics of the three life domains: Archaea, Bacteria, and Eukarya.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span></div></div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('bio118');event.stopPropagation()">BIO 118</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio312');event.stopPropagation()">BIO 312 (elective)</span><span class="chip" onclick="toggle('bio211');event.stopPropagation()">BIO 211 (elective)</span><span class="chip" onclick="toggle('bio240');event.stopPropagation()">BIO 240 (research)</span></div></div></div>
+    <div id="bio118" class="panel"><div class="panel-title">BIO 118 — General Biology Lab II</div><div class="panel-meta">1 cr · Spring only · Required</div><div class="panel-desc">Students examine the differences between various types of organisms and conduct inquiry-based experiments using an organismal model system. Also covers applicable terminology related to organismal biology.</div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('bio108');event.stopPropagation()">BIO 108</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio240');event.stopPropagation()">BIO 240 (research)</span></div></div></div>
+    <div id="chem106" class="panel"><div class="panel-title">CHEM 106 — General Chemistry II</div><div class="panel-meta">4 cr · Spring only · Required</div><div class="panel-desc">An extension of CHEM 105 covering properties of solutions, chemical equilibria, reaction kinetics, acid-base chemistry, thermodynamics, and electrochemistry. Lab exercises include use of instrumentation to monitor reactions and characterize compounds.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('chem105');event.stopPropagation()">CHEM 105 with C− min</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('chem209');event.stopPropagation()">CHEM 209 (C− min)</span><span class="chip" onclick="toggle('bio203');event.stopPropagation()">BIO 203 (elective)</span><span class="chip" onclick="toggle('bio211');event.stopPropagation()">BIO 211 (elective)</span><span class="chip" onclick="toggle('bio240');event.stopPropagation()">BIO 240 (research)</span></div></div></div>
+    <div id="engl133" class="panel"><div class="panel-title">ENGL 133 — English Composition II</div><div class="panel-meta">3 cr · Required</div><div class="panel-desc">Continuation of ENGL 132. Develops advanced academic writing and research skills.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('engl132');event.stopPropagation()">ENGL 132</span></div></div></div>
+    <div id="math121" class="panel"><div class="panel-title">MATH 121 — Introductory Probability &amp; Statistics</div><div class="panel-meta">3 cr · Required</div><div class="panel-desc">Introduction to descriptive and inferential statistics, probability, hypothesis testing, and data interpretation. Useful for research design and data analysis throughout the major.</div><p class="panel-note">No prerequisites listed. Can be taken in Y1 spring or later, but earlier is better for research and lab data analysis.</p></div>
+
+  </div>
+
+</div>
+
+<!-- ═══════ YEAR 2 ═══════ -->
+<div class="yr-wrap">
+  <div class="yr-head"><span class="yr-label">Year 2</span><div class="yr-line"></div></div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Fall semester</span>
+      <span class="sem-badge fall-badge">Fall</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio213')"><button class="check-btn" onclick="markDone('bio213');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 213</div><div class="card-name">Ecology</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem209')"><button class="check-btn" onclick="markDone('chem209');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 209</div><div class="card-name">Organic Chemistry I</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem219')"><button class="check-btn" onclick="markDone('chem219');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 219</div><div class="card-name">Organic Chem Lab I</div><div class="tags"><span class="tag tag-cr">1 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-req">required</span></div></div></div>
+    </div>
+    <div id="bio213" class="panel"><div class="panel-title">BIO 213 — Ecology</div><div class="panel-meta">3 cr · Fall only · Required</div><div class="panel-desc">Study of the interaction of plants and animals with the physical environment. Topics include population dynamics, food chains, energy flow, and adaptations.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span><span class="chip nc">Sophomore standing</span><span class="chip" onclick="toggle('chem105');event.stopPropagation()">CHEM 105 (concurrent ok)</span></div></div><p class="panel-note">The CHEM 105 requirement can be satisfied concurrently — however, since most students take CHEM 105 in Y1 fall, this prerequisite is typically met before Y2.</p></div>
+    <div id="chem209" class="panel"><div class="panel-title">CHEM 209 — Organic Chemistry I</div><div class="panel-meta">3 cr · Fall only · Required</div><div class="panel-desc">Introduction to basic principles of organic chemistry. Emphasizes functional group recognition, structure–property relationships, alkenes, alkynes, alkyl halides, stereochemistry, reaction mechanisms, and an introduction to IR and NMR spectroscopy.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('chem106');event.stopPropagation()">CHEM 106 with C− min</span></div></div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('chem219');event.stopPropagation()">CHEM 219</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('chem210');event.stopPropagation()">CHEM 210</span></div></div></div>
+    <div id="chem219" class="panel"><div class="panel-title">CHEM 219 — Organic Chemistry Lab I</div><div class="panel-meta">1 cr · Fall only · Required</div><div class="panel-desc">Laboratory for CHEM 209. Develops skills in planning, conducting, and interpreting organic chemistry experiments. Introduces synthetic organic chemistry techniques and characterization by chemical and instrumental methods.</div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('chem209');event.stopPropagation()">CHEM 209</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('chem210');event.stopPropagation()">CHEM 210</span></div></div></div>
+  </div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Spring semester</span>
+      <span class="sem-badge spring-badge">Spring</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio201')"><button class="check-btn" onclick="markDone('bio201');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 201</div><div class="card-name">Plant Biology</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem210')"><button class="check-btn" onclick="markDone('chem210');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 210</div><div class="card-name">Organic Chemistry II</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('chem220')"><button class="check-btn" onclick="markDone('chem220');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--chem)"></div><div class="card-body"><div class="card-code">CHEM 220</div><div class="card-name">Organic Chem Lab II</div><div class="tags"><span class="tag tag-cr">1 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+    </div>
+    <div id="bio201" class="panel"><div class="panel-title">BIO 201 — Plant Biology</div><div class="panel-meta">4 cr · Spring only · Required (includes 3-hr lab)</div><div class="panel-desc">Students examine various kinds of plants including their structure, internal workings, ecological relationships, and evolution. Includes data collection, analysis, and interpretation. Three class hours and three-hour lab.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span><span class="chip nc">Sophomore standing</span></div></div></div>
+    <div id="chem210" class="panel"><div class="panel-title">CHEM 210 — Organic Chemistry II</div><div class="panel-meta">3 cr · Spring only · Required</div><div class="panel-desc">Continuation of CHEM 209. Covers alcohols, ethers, aromatics, carboxylic acids, aldehydes, and ketones. Emphasizes complex reaction mechanisms, synthesis design, and spectroscopic structure determination.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('chem209');event.stopPropagation()">CHEM 209</span><span class="chip" onclick="toggle('chem219');event.stopPropagation()">CHEM 219</span></div></div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('chem220');event.stopPropagation()">CHEM 220</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio306');event.stopPropagation()">BIO 306</span><span class="chip" onclick="toggle('bio310');event.stopPropagation()">BIO 310</span><span class="chip" onclick="toggle('bio320');event.stopPropagation()">BIO 320 (elective)</span></div></div></div>
+    <div id="chem220" class="panel"><div class="panel-title">CHEM 220 — Organic Chemistry Lab II</div><div class="panel-meta">1 cr · Spring only · Required</div><div class="panel-desc">Continuation of CHEM 219. Emphasis on synthesis and subsequent characterization and identification of organic compounds by chemical and instrumental methods. Four-hour lab.</div><div class="panel-row"><span class="panel-label">Coreq</span><div class="chips"><span class="chip co" onclick="toggle('chem210');event.stopPropagation()">CHEM 210</span></div></div></div>
+  </div>
+
+</div>
+
+<!-- ═══════ YEAR 3 ═══════ -->
+<div class="yr-wrap">
+  <div class="yr-head"><span class="yr-label">Year 3</span><div class="yr-line"></div></div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Fall semester</span>
+      <span class="sem-badge fall-badge">Fall</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio306')"><button class="check-btn" onclick="markDone('bio306');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 306</div><div class="card-name">Genetics</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-fo">fall only</span><span class="tag tag-warn">bottleneck</span></div></div></div>
+      <div class="card" onclick="toggle('bio-elec-y3f')"><button class="check-btn" onclick="markDone('bio-elec-y3f');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 2XX/4XX</div><div class="card-name">Biology Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('phys-y3')"><button class="check-btn" onclick="markDone('phys-y3');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--phys)"></div><div class="card-body"><div class="card-code">PHYS 123/110/101</div><div class="card-name">Physics I (choose one)</div><div class="tags"><span class="tag tag-cr">3–4 cr</span><span class="tag tag-opt">alt. option</span></div></div></div>
+    </div>
+    <div id="bio306" class="panel"><div class="panel-title">BIO 306 — Genetics</div><div class="panel-meta">4 cr · Fall only · Required (includes 3-hr lab)</div><div class="panel-desc">A study of classical organismal heredity and its molecular basis. Topics include Mendelian principles, gene structure and function, and changes in genetic material. Three class hours and three-hour lab.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span><span class="chip" onclick="toggle('chem210');event.stopPropagation()">CHEM 210</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('bio455');event.stopPropagation()">BIO 455 (+ sr standing)</span><span class="chip" onclick="toggle('bio470');event.stopPropagation()">BIO 470 (capstone)</span><span class="chip" onclick="toggle('bio401');event.stopPropagation()">BIO 401 (elective)</span><span class="chip" onclick="toggle('hs412');event.stopPropagation()">HS 412 (elective)</span></div></div></div>
+    <div id="bio-elec-y3f" class="panel"><div class="panel-title">BIO 2XX/4XX — Biology Elective</div><div class="panel-meta">3 cr · Required (part of 7-cr BIO elective requirement)</div><p class="panel-note">Choose from BIO 200–400-level electives (see elective section below). HS 315, HS 320, and HS 412 also count toward this requirement. Prerequisites vary.</p></div>
+    <div id="phys-y3" class="panel"><div class="panel-title">Physics I — choose one option</div><div class="panel-meta">Required · 3–4 cr depending on choice</div><div class="panel-desc">PHYS 123 (4 cr, fall only): calculus-based mechanics, thermodynamics, and nuclear physics with medical applications. Requires MATH 123 or equivalent. Unlocks PHYS 124.
+
+PHYS 110 (3 cr, spring only): algebra-based physics applied to the human body — energy, forces, motion, electricity, sight, and sound. Two class hours and three-hour lab. Does not unlock PHYS 124.
+
+PHYS 101 (3 cr): conceptual survey of physics principles. No prerequisites.</div><div class="opt-box"><strong>PHYS 123</strong> (4 cr, Fall only) — Physics of Life Sciences I. Prereq: MATH 123 or 127 or 133. Calculus-based. Unlocks PHYS 124.<br><br><strong>PHYS 110</strong> (3 cr, Spring only) — Physics of the Human Body. No listed prerequisites. Algebra-based. Counts as first physics course if PHYS 123 not taken. Does not unlock PHYS 124 (which requires PHYS 123).<br><br><strong>PHYS 101</strong> (3 cr) — Elements of Physics. Conceptual survey. No listed prerequisites.</div><p class="panel-note">PHYS 123 is the recommended path for pre-med and pre-grad students. PHYS 110 or 101 are lower-intensity alternatives that still satisfy the requirement.</p></div>
+  </div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Spring semester</span>
+      <span class="sem-badge spring-badge">Spring</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio310')"><button class="check-btn" onclick="markDone('bio310');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 310</div><div class="card-name">Cell Biology</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('phys-y3s')"><button class="check-btn" onclick="markDone('phys-y3s');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--phys)"></div><div class="card-body"><div class="card-code">PHYS 124/15X</div><div class="card-name">Physics II (choose one)</div><div class="tags"><span class="tag tag-cr">3–4 cr</span><span class="tag tag-opt">alt. option</span></div></div></div>
+    </div>
+    <div id="bio310" class="panel"><div class="panel-title">BIO 310 — Cell Biology</div><div class="panel-meta">4 cr · Spring only · Required (includes lab)</div><div class="panel-desc">Students examine cellular structure and function including the molecular organization of cell organelles. Covers key concepts with written and oral communication components. Data collection, analysis, and interpretation are practiced in the laboratory.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio107');event.stopPropagation()">BIO 107</span><span class="chip" onclick="toggle('bio117');event.stopPropagation()">BIO 117</span><span class="chip" onclick="toggle('chem210');event.stopPropagation()">CHEM 210</span></div></div><div class="panel-row"><span class="panel-label">Unlocks</span><div class="chips"><span class="chip" onclick="toggle('hs320');event.stopPropagation()">HS 320 (elective)</span></div></div></div>
+    <div id="phys-y3s" class="panel"><div class="panel-title">Physics II — choose one option</div><div class="panel-meta">Required · 3–4 cr depending on choice</div><div class="panel-desc">PHYS 124 (4 cr, spring only): calculus-based electricity and magnetism, optics, and modern physics with life-science applications. Requires PHYS 123.
+
+PHYS 15X: an alternate physics elective for students who took PHYS 110 or 101 in lieu of PHYS 123.</div><div class="opt-box"><strong>PHYS 124</strong> (4 cr, Spring only) — Physics of Life Sciences II. Prereq: PHYS 123. Calculus-based. Must have taken PHYS 123 in Y3 fall.<br><br><strong>PHYS 15X</strong> (3 cr) — PHYS 15X elective (specific course varies). Satisfies the second physics requirement without needing PHYS 123 first.</div><p class="panel-note">If PHYS 123 was taken in Y3 fall, take PHYS 124 in Y3 spring. If PHYS 110 or 101 was taken instead, use a PHYS 15X elective here.</p></div>
+  </div>
+
+</div>
+
+<!-- ═══════ YEAR 4 ═══════ -->
+<div class="yr-wrap">
+  <div class="yr-head"><span class="yr-label">Year 4</span><div class="yr-line"></div></div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Fall semester</span>
+      <span class="sem-badge fall-badge">Fall</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio-elec-y4f')"><button class="check-btn" onclick="markDone('bio-elec-y4f');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 2XX/4XX</div><div class="card-name">Biology Elective</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-req">required</span></div></div></div>
+    </div>
+    <div id="bio-elec-y4f" class="panel"><div class="panel-title">BIO 2XX/4XX — Biology Elective</div><div class="panel-meta">3 cr · Part of 7-cr BIO elective requirement</div><p class="panel-note">Choose from BIO 200–400-level electives or HS 315, HS 320, HS 412 (see elective section below). Prerequisites vary. Combined with the Y3 fall elective (3 cr) and Y4 spring elective (4 cr), this completes the 7-cr BIO elective requirement. Note: BIO 401 (Molecular Biology) is one popular option here if BIO 306 has been completed.</p></div>
+  </div>
+
+  <div class="sem">
+    <div class="sem-head">
+      <span class="sem-title">Spring semester</span>
+      <span class="sem-badge spring-badge">Spring</span>
+    </div>
+    <div class="cards">
+      <div class="card" onclick="toggle('bio455')"><button class="check-btn" onclick="markDone('bio455');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 455</div><div class="card-name">Evolution</div><div class="tags"><span class="tag tag-cr">3 cr</span><span class="tag tag-so">spring only</span><span class="tag tag-req">required</span></div></div></div>
+      <div class="card" onclick="toggle('bio470')"><button class="check-btn" onclick="markDone('bio470');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 470</div><div class="card-name">Seminar in Biology</div><div class="tags"><span class="tag tag-cr">1 cr</span><span class="tag tag-cap">capstone</span></div></div></div>
+      <div class="card" onclick="toggle('bio-elec-y4s')"><button class="check-btn" onclick="markDone('bio-elec-y4s');event.stopPropagation()" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="card-stripe" style="background:var(--bio)"></div><div class="card-body"><div class="card-code">BIO 2XX/4XX</div><div class="card-name">Biology Elective</div><div class="tags"><span class="tag tag-cr">4 cr</span><span class="tag tag-req">required</span></div></div></div>
+    </div>
+    <div id="bio455" class="panel"><div class="panel-title">BIO 455 — Evolution</div><div class="panel-meta">3 cr · Spring only · Required</div><div class="panel-desc">Study of organic evolution and its theoretical basis. Develops three major themes: the history of evolutionary thought, the mechanisms of evolution, and highlights in the history of life.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio306');event.stopPropagation()">BIO 306</span><span class="chip nc">Senior standing</span></div></div><p class="panel-note">Both BIO 306 and senior standing are required. This course cannot be taken until Y4 at the earliest even if BIO 306 is completed in Y3.</p></div>
+    <div id="bio470" class="panel"><div class="panel-title">BIO 470 — Seminar in Biology (Capstone)</div><div class="panel-meta">1 cr · Required capstone</div><div class="panel-desc">Capstone experience for biology majors. Students read, discuss, and present articles from the primary literature related to a particular theme in biology.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('bio306');event.stopPropagation()">BIO 306</span><span class="chip nc">or instructor permission</span></div></div><p class="panel-note">Primary literature seminar. The degree capstone. BIO 306 is the gate — any delay in Genetics cascades directly to graduation eligibility for this course and BIO 455.</p></div>
+    <div id="bio-elec-y4s" class="panel"><div class="panel-title">BIO 2XX/4XX — Biology Elective</div><div class="panel-meta">4 cr · Part of 7-cr BIO elective requirement</div><p class="panel-note">Combined with the 3-cr BIO elective in Y3 fall, this completes the 7-cr BIO elective requirement. Choose from BIO 200–400-level courses or HS 315, HS 320, HS 412 (see elective section below).</p></div>
+  </div>
+
+</div>
+
+<div class="section-block" id="electives-section">
+  <div class="section-block-head">
+    <div class="section-block-title">General Electives</div>
+    <div class="section-block-meta">
+      Of the credits outside the major core, <strong>15 cr must be at the 300- or 400-level</strong>
+      and <strong>11 additional credits may be at any level</strong> (total: 26 cr of general electives).
+      The remaining credits are covered by GBD coursework tracked in the section below.
+      At least one WIC course at the 200/300-level and one at the 300/400-level are required
+      (these may double-count with GBD or major requirements).
+    </div>
+  </div>
+  <div class="elec-table-wrap">
+    <div class="elec-table-header">
+      <span class="ecol-num">Course No.</span>
+      <span class="ecol-name">Course Name</span>
+      <span class="ecol-cr">Credits</span>
+      <span class="ecol-wic">WIC?</span>
+    </div>
+    <div id="elec-rows">
+<div class="elec-row" id="elec-row-0"><div class="elec-cell"><input type="text" id="elec-0-num" placeholder="e.g. HIST 301" autocomplete="off" oninput="updateElecTotal()"></div><div class="elec-cell"><input type="text" id="elec-0-name" placeholder="Course name" autocomplete="off"></div><div class="elec-cell"><input type="number" id="elec-0-cr" placeholder="0" min="0" max="9" step="1" style="text-align:center" oninput="updateElecTotal()"></div><div class="elec-cell center"><button class="elec-wic-check" id="elec-0-wic" onclick="toggleWicStatic(0)" title="Writing Intensive?"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="elec-row" id="elec-row-1"><div class="elec-cell"><input type="text" id="elec-1-num" placeholder="e.g. HIST 301" autocomplete="off" oninput="updateElecTotal()"></div><div class="elec-cell"><input type="text" id="elec-1-name" placeholder="Course name" autocomplete="off"></div><div class="elec-cell"><input type="number" id="elec-1-cr" placeholder="0" min="0" max="9" step="1" style="text-align:center" oninput="updateElecTotal()"></div><div class="elec-cell center"><button class="elec-wic-check" id="elec-1-wic" onclick="toggleWicStatic(1)" title="Writing Intensive?"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="elec-row" id="elec-row-2"><div class="elec-cell"><input type="text" id="elec-2-num" placeholder="e.g. HIST 301" autocomplete="off" oninput="updateElecTotal()"></div><div class="elec-cell"><input type="text" id="elec-2-name" placeholder="Course name" autocomplete="off"></div><div class="elec-cell"><input type="number" id="elec-2-cr" placeholder="0" min="0" max="9" step="1" style="text-align:center" oninput="updateElecTotal()"></div><div class="elec-cell center"><button class="elec-wic-check" id="elec-2-wic" onclick="toggleWicStatic(2)" title="Writing Intensive?"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="elec-row" id="elec-row-3"><div class="elec-cell"><input type="text" id="elec-3-num" placeholder="e.g. HIST 301" autocomplete="off" oninput="updateElecTotal()"></div><div class="elec-cell"><input type="text" id="elec-3-name" placeholder="Course name" autocomplete="off"></div><div class="elec-cell"><input type="number" id="elec-3-cr" placeholder="0" min="0" max="9" step="1" style="text-align:center" oninput="updateElecTotal()"></div><div class="elec-cell center"><button class="elec-wic-check" id="elec-3-wic" onclick="toggleWicStatic(3)" title="Writing Intensive?"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="elec-row" id="elec-row-4"><div class="elec-cell"><input type="text" id="elec-4-num" placeholder="e.g. HIST 301" autocomplete="off" oninput="updateElecTotal()"></div><div class="elec-cell"><input type="text" id="elec-4-name" placeholder="Course name" autocomplete="off"></div><div class="elec-cell"><input type="number" id="elec-4-cr" placeholder="0" min="0" max="9" step="1" style="text-align:center" oninput="updateElecTotal()"></div><div class="elec-cell center"><button class="elec-wic-check" id="elec-4-wic" onclick="toggleWicStatic(4)" title="Writing Intensive?"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="elec-row" id="elec-row-5"><div class="elec-cell"><input type="text" id="elec-5-num" placeholder="e.g. HIST 301" autocomplete="off" oninput="updateElecTotal()"></div><div class="elec-cell"><input type="text" id="elec-5-name" placeholder="Course name" autocomplete="off"></div><div class="elec-cell"><input type="number" id="elec-5-cr" placeholder="0" min="0" max="9" step="1" style="text-align:center" oninput="updateElecTotal()"></div><div class="elec-cell center"><button class="elec-wic-check" id="elec-5-wic" onclick="toggleWicStatic(5)" title="Writing Intensive?"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="elec-row" id="elec-row-6"><div class="elec-cell"><input type="text" id="elec-6-num" placeholder="e.g. HIST 301" autocomplete="off" oninput="updateElecTotal()"></div><div class="elec-cell"><input type="text" id="elec-6-name" placeholder="Course name" autocomplete="off"></div><div class="elec-cell"><input type="number" id="elec-6-cr" placeholder="0" min="0" max="9" step="1" style="text-align:center" oninput="updateElecTotal()"></div><div class="elec-cell center"><button class="elec-wic-check" id="elec-6-wic" onclick="toggleWicStatic(6)" title="Writing Intensive?"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="elec-row" id="elec-row-7"><div class="elec-cell"><input type="text" id="elec-7-num" placeholder="e.g. HIST 301" autocomplete="off" oninput="updateElecTotal()"></div><div class="elec-cell"><input type="text" id="elec-7-name" placeholder="Course name" autocomplete="off"></div><div class="elec-cell"><input type="number" id="elec-7-cr" placeholder="0" min="0" max="9" step="1" style="text-align:center" oninput="updateElecTotal()"></div><div class="elec-cell center"><button class="elec-wic-check" id="elec-7-wic" onclick="toggleWicStatic(7)" title="Writing Intensive?"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="elec-row" id="elec-row-8"><div class="elec-cell"><input type="text" id="elec-8-num" placeholder="e.g. HIST 301" autocomplete="off" oninput="updateElecTotal()"></div><div class="elec-cell"><input type="text" id="elec-8-name" placeholder="Course name" autocomplete="off"></div><div class="elec-cell"><input type="number" id="elec-8-cr" placeholder="0" min="0" max="9" step="1" style="text-align:center" oninput="updateElecTotal()"></div><div class="elec-cell center"><button class="elec-wic-check" id="elec-8-wic" onclick="toggleWicStatic(8)" title="Writing Intensive?"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="elec-row" id="elec-row-9"><div class="elec-cell"><input type="text" id="elec-9-num" placeholder="e.g. HIST 301" autocomplete="off" oninput="updateElecTotal()"></div><div class="elec-cell"><input type="text" id="elec-9-name" placeholder="Course name" autocomplete="off"></div><div class="elec-cell"><input type="number" id="elec-9-cr" placeholder="0" min="0" max="9" step="1" style="text-align:center" oninput="updateElecTotal()"></div><div class="elec-cell center"><button class="elec-wic-check" id="elec-9-wic" onclick="toggleWicStatic(9)" title="Writing Intensive?"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="elec-row" id="elec-row-10"><div class="elec-cell"><input type="text" id="elec-10-num" placeholder="e.g. HIST 301" autocomplete="off" oninput="updateElecTotal()"></div><div class="elec-cell"><input type="text" id="elec-10-name" placeholder="Course name" autocomplete="off"></div><div class="elec-cell"><input type="number" id="elec-10-cr" placeholder="0" min="0" max="9" step="1" style="text-align:center" oninput="updateElecTotal()"></div><div class="elec-cell center"><button class="elec-wic-check" id="elec-10-wic" onclick="toggleWicStatic(10)" title="Writing Intensive?"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="elec-row" id="elec-row-11"><div class="elec-cell"><input type="text" id="elec-11-num" placeholder="e.g. HIST 301" autocomplete="off" oninput="updateElecTotal()"></div><div class="elec-cell"><input type="text" id="elec-11-name" placeholder="Course name" autocomplete="off"></div><div class="elec-cell"><input type="number" id="elec-11-cr" placeholder="0" min="0" max="9" step="1" style="text-align:center" oninput="updateElecTotal()"></div><div class="elec-cell center"><button class="elec-wic-check" id="elec-11-wic" onclick="toggleWicStatic(11)" title="Writing Intensive?"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+    </div>
+    <div class="elec-table-footer">
+      <span class="elec-total-label">Credits entered:</span>
+      <span class="elec-total-val" id="elec-total">0</span>
+      <span class="elec-total-sep">/</span>
+      <span class="elec-total-req">26 cr required (15 cr at 300/400-level + 11 cr any level)</span>
+    </div>
+  </div>
+</div>
+    <div id="engl133" class="panel"><div class="panel-title">ENGL 133 — English Composition II</div><div class="panel-meta">3 cr · Required</div><div class="panel-desc">Continuation of ENGL 132. Develops advanced academic writing and research skills.</div><div class="panel-row"><span class="panel-label">Prereqs</span><div class="chips"><span class="chip" onclick="toggle('engl132');event.stopPropagation()">ENGL 132</span></div></div></div>
+    <div id="math121" class="panel"><div class="panel-title">MATH 121 — Introductory Probability &amp; Statistics</div><div class="panel-meta">3 cr · Required</div><div class="panel-desc">Introduction to descriptive and inferential statistics, probability, hypothesis testing, and data interpretation. Useful for research design and data analysis throughout the major.</div><p class="panel-note">No prerequisites listed. Can be taken in Y1 spring or later, but earlier is better for research and lab data analysis.</p></div>
+<div class="section-block" id="gbd-section">
+  <div class="section-block-head">
+    <div class="section-block-title">Golden Bear Discovery (GBD)</div>
+    <div class="section-block-meta">
+      At least 40 credits of GBD coursework required. ENGL 132, ENGL 133, and major science
+      courses satisfy several GBD trail requirements. Use ✓ to mark completed; enter the specific
+      course number in the text box on each tile.
+    </div>
+  </div>
+
+  <div class="gbd-stage-label">Stage I — Embarking on Your Journey</div>
+
+  <div class="gbd-group-label">BLUE &amp; GOLD</div>
+  <div class="gbd-cards">
+    <div class="gbd-card done" id="gbd-blue101">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-blue101')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">BLUE 101</div>
+      <div class="gbd-card-name">Belonging &amp; Learning in the University Environment</div>
+      <div class="gbd-card-cr">1 cr · Required · First semester</div>
+      <div class="gbd-course-entry fixed-course">Fixed: BLUE 101</div>
+    </div>
+    <div class="gbd-card" id="gbd-gold">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-gold')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">GOLD</div>
+      <div class="gbd-card-name">Gateway to Opportunity, Learning &amp; Discovery</div>
+      <div class="gbd-card-cr">3 cr · First year · Counts as one Trail course</div>
+      <input class="gbd-course-input" id="gbd-gold-input" type="text" placeholder="Course no." oninput="saveGbdInput('gbd-gold','gbd-gold-input')">
+    </div>
+  </div>
+
+  <div class="gbd-group-label">Modern Communication <span class="gbd-group-req">9–10 cr required (3 courses)</span></div>
+  <div class="gbd-cards">
+    <div class="gbd-card done" id="gbd-engl132">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-engl132')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">ENGL 132</div>
+      <div class="gbd-card-name">Written Communication I</div>
+      <div class="gbd-card-cr">3 cr · Required · In major core</div>
+      <div class="gbd-course-entry fixed-course">Fixed: ENGL 132</div>
+    </div>
+    <div class="gbd-card done" id="gbd-engl133">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-engl133')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">ENGL 133</div>
+      <div class="gbd-card-name">Written Communication II</div>
+      <div class="gbd-card-cr">3 cr · Required · In major core</div>
+      <div class="gbd-course-entry fixed-course">Fixed: ENGL 133</div>
+    </div>
+    <div class="gbd-card" id="gbd-multimodal">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-multimodal')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">Multimodal Comm.</div>
+      <div class="gbd-card-name">Multimodal Communication</div>
+      <div class="gbd-card-cr">3–4 cr · 1 course required</div>
+      <input class="gbd-course-input" id="gbd-multimodal-input" type="text" placeholder="Course no." oninput="saveGbdInput('gbd-multimodal','gbd-multimodal-input')">
+    </div>
+  </div>
+
+  <div class="gbd-stage-label">Stage II — Navigating Your Trails <span style="font-weight:400;font-size:11px;color:var(--text-3)">(27 cr minimum across all four trails)</span></div>
+
+  <div class="gbd-group-label">Science, Mathematics &amp; Technology Trail <span class="gbd-group-req">3–4 courses · fully satisfied by major core</span></div>
+  <div class="gbd-cards">
+    <div class="gbd-card done" id="gbd-smt-bio107">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-smt-bio107')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">BIO 107 + 117</div>
+      <div class="gbd-card-name">Scientific Reasoning — General Biology I w/ Lab</div>
+      <div class="gbd-card-cr">4 cr · Satisfies SMT scientific reasoning · In major core</div>
+      <div class="gbd-course-entry fixed-course">Fixed: BIO 107 + BIO 117</div>
+    </div>
+    <div class="gbd-card done" id="gbd-smt-math">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-smt-math')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">MATH 109/123</div>
+      <div class="gbd-card-name">Mathematical &amp; Quantitative Reasoning</div>
+      <div class="gbd-card-cr">3 cr · Satisfies SMT math/quantitative · In major core</div>
+      <div class="gbd-course-entry fixed-course">Fixed: MATH 109 or MATH 123</div>
+    </div>
+    <div class="gbd-card done" id="gbd-smt-chem105">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-smt-chem105')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">CHEM 105</div>
+      <div class="gbd-card-name">Additional SMT — General Chemistry I</div>
+      <div class="gbd-card-cr">4 cr · Satisfies 3rd SMT course · In major core</div>
+      <div class="gbd-course-entry fixed-course">Fixed: CHEM 105 · SMT trail fully satisfied by major</div>
+    </div>
+  </div>
+
+  <div class="gbd-group-label">Creative Expression Trail <span class="gbd-group-req">at least 1 course required</span></div>
+  <div class="gbd-cards">
+    <div class="gbd-card" id="gbd-ce-1">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-ce-1')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">Creative Expression</div>
+      <div class="gbd-card-name">Creative Expression Trail — Course 1</div>
+      <div class="gbd-card-cr">3+ cr · Art, film, music, theater, or qualifying English/history</div>
+      <input class="gbd-course-input" id="gbd-ce-1-input" type="text" placeholder="Course no." oninput="saveGbdInput('gbd-ce-1','gbd-ce-1-input')">
+    </div>
+  </div>
+
+  <div class="gbd-group-label">Citizenship, Identity &amp; Community Trail <span class="gbd-group-req">at least 2 courses required</span></div>
+  <div class="gbd-cards">
+    <div class="gbd-card" id="gbd-cic-1">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-cic-1')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">CIC — Course 1</div>
+      <div class="gbd-card-name">Citizenship, Identity &amp; Community — Course 1</div>
+      <div class="gbd-card-cr">3+ cr · History, global cultures, language, or qualifying courses</div>
+      <input class="gbd-course-input" id="gbd-cic-1-input" type="text" placeholder="Course no." oninput="saveGbdInput('gbd-cic-1','gbd-cic-1-input')">
+    </div>
+    <div class="gbd-card" id="gbd-cic-2">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-cic-2')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">CIC — Course 2</div>
+      <div class="gbd-card-name">Citizenship, Identity &amp; Community — Course 2</div>
+      <div class="gbd-card-cr">3+ cr · History, global cultures, language, or qualifying courses</div>
+      <input class="gbd-course-input" id="gbd-cic-2-input" type="text" placeholder="Course no." oninput="saveGbdInput('gbd-cic-2','gbd-cic-2-input')">
+    </div>
+  </div>
+
+  <div class="gbd-group-label">Social Systems Trail <span class="gbd-group-req">at least 1 course required</span></div>
+  <div class="gbd-cards">
+    <div class="gbd-card" id="gbd-ss-1">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-ss-1')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">Social Systems</div>
+      <div class="gbd-card-name">Social Systems Trail — Course 1</div>
+      <div class="gbd-card-cr">3+ cr · Criminal justice, economics, psychology, sociology, or qualifying courses</div>
+      <input class="gbd-course-input" id="gbd-ss-1-input" type="text" placeholder="Course no." oninput="saveGbdInput('gbd-ss-1','gbd-ss-1-input')">
+    </div>
+  </div>
+
+  <div class="gbd-stage-label">Stage III — Capstone</div>
+  <div class="gbd-cards">
+    <div class="gbd-card" id="gbd-capstone">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-capstone')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">BIO 470</div>
+      <div class="gbd-card-name">Seminar in Biology — GBD Capstone</div>
+      <div class="gbd-card-cr">1 cr · Satisfies GBD Capstone requirement · In major core</div>
+      <div class="gbd-course-entry fixed-course">Fixed: BIO 470</div>
+    </div>
+  </div>
+
+  <div class="gbd-stage-label">Writing Intensive Courses (WIC) <span style="font-weight:400;font-size:11px;color:var(--text-3)">6 cr required — can double-count with major or GBD</span></div>
+  <div class="gbd-cards">
+    <div class="gbd-card" id="gbd-wic1">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-wic1')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">WIC — 200/300-level</div>
+      <div class="gbd-card-name">Writing Intensive Course 1</div>
+      <div class="gbd-card-cr">3 cr · Must be 200- or 300-level</div>
+      <input class="gbd-course-input" id="gbd-wic1-input" type="text" placeholder="Course no." oninput="saveGbdInput('gbd-wic1','gbd-wic1-input')">
+    </div>
+    <div class="gbd-card" id="gbd-wic2">
+      <button class="check-btn gbd-check" onclick="toggleGbd('gbd-wic2')" title="Mark complete"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="gbd-card-code">WIC — 300/400-level</div>
+      <div class="gbd-card-name">Writing Intensive Course 2</div>
+      <div class="gbd-card-cr">3 cr · Must be 300- or 400-level</div>
+      <input class="gbd-course-input" id="gbd-wic2-input" type="text" placeholder="Course no." oninput="saveGbdInput('gbd-wic2','gbd-wic2-input')">
+    </div>
+  </div>
+
+</div>
+
+<div class="sec-head">Critical path &amp; advising notes</div>
+<ul class="note-list">
+  <li class="crit"><strong>CHEM chain is the longest bottleneck:</strong> CHEM 105 (Y1F) → CHEM 106 (Y1Sp, C− min) → CHEM 209 (Y2F, C− min) → CHEM 210 (Y2Sp). This chain also gates BIO 306 and BIO 310. Missing CHEM 105 in Y1 fall delays Organic Chemistry by a full year.</li>
+  <li><strong>Grade minimums on the CHEM chain:</strong> C− required for CHEM 105→106 and CHEM 106→209. No minimum is stated beyond those two transitions, though academic standing requirements apply overall.</li>
+  <li class="crit"><strong>BIO 306 (Genetics) is the central hub.</strong> It requires CHEM 210 (earliest: Y2 spring), so Y3 fall is the earliest it can be taken. It gates BIO 455 (+ senior standing), BIO 470 (capstone), BIO 401 (elective), and HS 412 (elective). Any delay cascades to graduation.</li>
+  <li><strong>BIO 306 is placed in Y3 fall</strong> — consistent with the course description (fall only). This gives one full semester of Genetics before BIO 455 and BIO 470 in Y4 spring, and positions BIO 401 cleanly in Y4 fall.</li>
+  <li><strong>BIO 455 requires senior standing</strong> in addition to BIO 306. Even if BIO 306 is complete, BIO 455 cannot be taken until Y4. It is spring only — so Y4 spring is the only viable slot in a standard four-year plan.</li>
+  <li><strong>MATH 109 vs MATH 123:</strong> Students who place into Precalculus must take MATH 109 first, adding one semester before MATH 123 is available. This delays PHYS 123 by a year if PHYS 123 is the chosen physics option — pushing it to Y4 or requiring the PHYS 110/101 alternative instead.</li>
+  <li><strong>PHYS options matter for pre-med:</strong> PHYS 123+124 (calculus-based) is strongly recommended for students intending medical school or graduate programs. Contact the pre-med advisor or department chair for guidance on the full pre-med sequence.</li>
+  <li><strong>HS 315 access for Biology majors:</strong> HS 315 (Protein Folding) lists BIO 216 as a prerequisite — a course not required in the Biology major. Biology students who want this elective will need instructor permission.</li>
+  <li><strong>BIO 240 (Research Projects) has a GPA threshold:</strong> a minimum 3.30 in-major GPA is required, plus instructor permission. It is not available to all students.</li>
+  <li><strong>Major GPA:</strong> 2.0 minimum across all BIO courses (excl. BIO 15X and BIO 19X), and CHEM 105/106/209/210/219/220, and HS 315/320/412 if taken as part of the degree. Total program: 120 cr. Major core: 62–64 cr. Writing Intensive: 6 cr required. No transfer credit for major-level science lab courses taught online.</li>
+</ul>
+
+</div>
+<script>
+const ALL_IDS       = ['bio107', 'bio117', 'chem105', 'math-y1', 'engl132', 'blue101', 'bio108', 'bio118', 'chem106', 'engl133', 'math121', 'gold', 'bio213', 'chem209', 'chem219', 'gbd-y2f', 'bio201', 'chem210', 'chem220', 'gbd-y2s', 'wic2', 'bio306', 'bio-elec-y3f', 'phys-y3', 'gbd-y3f', 'gen-y3f', 'bio310', 'phys-y3s', 'gen-y3s-upper', 'gen-y3s', 'wic3', 'bio-elec-y4f', 'gen-y4f', 'gen-y4f2', 'bio455', 'bio470', 'bio-elec-y4s', 'gen-y4s-upper', 'gen-y4s-gen', 'bio203', 'bio211', 'bio312', 'bio320', 'bio240', 'hs315', 'hs320', 'hs412', 'gbd-blue101', 'gbd-gold', 'gbd-engl132', 'gbd-engl133', 'gbd-multimodal', 'gbd-smt-bio107', 'gbd-smt-math', 'gbd-smt-chem105', 'gbd-ce-1', 'gbd-cic-1', 'gbd-cic-2', 'gbd-ss-1', 'gbd-capstone', 'gbd-wic1', 'gbd-wic2'];
+const GBD_PREDONE   = ['gbd-blue101', 'gbd-engl132', 'gbd-engl133', 'gbd-smt-bio107', 'gbd-smt-math', 'gbd-smt-chem105', 'gbd-capstone'];
+const GBD_INPUTS    = [['gbd-gold', 'gbd-gold-input'], ['gbd-multimodal', 'gbd-multimodal-input'], ['gbd-ce-1', 'gbd-ce-1-input'], ['gbd-cic-1', 'gbd-cic-1-input'], ['gbd-cic-2', 'gbd-cic-2-input'], ['gbd-ss-1', 'gbd-ss-1-input'], ['gbd-wic1', 'gbd-wic1-input'], ['gbd-wic2', 'gbd-wic2-input']];
+const NUM_ELEC_ROWS = 12;
+const ELEC_REQUIRED_CR = 26;
+const FILE_KEY = 'bio_advising2__' + window.location.pathname.split('/').pop();
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(FILE_KEY)) || {}; }
+  catch(e) { return {}; }
+}
+function saveState(state) {
+  localStorage.setItem(FILE_KEY, JSON.stringify(state));
+  flashSaved();
+}
+function flashSaved() {
+  var ind = document.getElementById('save-indicator');
+  if (!ind) return;
+  ind.classList.add('show');
+  clearTimeout(ind._t);
+  ind._t = setTimeout(function() { ind.classList.remove('show'); }, 1800);
+}
+
+function toggle(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var wasOpen = el.classList.contains('show');
+  document.querySelectorAll('.panel.show').forEach(function(p) { p.classList.remove('show'); });
+  document.querySelectorAll('.card.active, .elec-card.active').forEach(function(c) { c.classList.remove('active'); });
+  if (!wasOpen) {
+    el.classList.add('show');
+    var card = el.previousElementSibling;
+    while (card && !card.classList.contains('card') && !card.classList.contains('elec-card')) {
+      card = card.previousElementSibling;
+    }
+    if (card) card.classList.add('active');
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function markDone(id) {
+  var state = loadState();
+  state.done = state.done || {};
+  state.done[id] = !state.done[id];
+  saveState(state);
+  applyDone(id, state.done[id]);
+  updateProgress();
+}
+function applyDone(id, isDone) {
+  document.querySelectorAll('.card[onclick*="\'' + id + '\'"], .elec-card[onclick*="\'' + id + '\'"]')
+    .forEach(function(c) { c.classList.toggle('done', !!isDone); });
+}
+
+function toggleGbd(id) {
+  var state = loadState();
+  state.gbd = state.gbd || {};
+  state.gbd[id] = !state.gbd[id];
+  saveState(state);
+  applyGbd(id, state.gbd[id]);
+  updateProgress();
+}
+function applyGbd(id, isDone) {
+  var card = document.getElementById(id);
+  if (card) card.classList.toggle('done', !!isDone);
+}
+function saveGbdInput(cardId, inputId) {
+  var input = document.getElementById(inputId);
+  if (!input) return;
+  var state = loadState();
+  state.gbdInputs = state.gbdInputs || {};
+  state.gbdInputs[inputId] = input.value;
+  saveState(state);
+}
+
+function updateElecTotal() {
+  var total = 0;
+  for (var i = 0; i < NUM_ELEC_ROWS; i++) {
+    var cr = document.getElementById('elec-' + i + '-cr');
+    if (cr) total += parseFloat(cr.value) || 0;
+  }
+  var el = document.getElementById('elec-total');
+  if (el) {
+    el.textContent = total;
+    el.style.color = total >= ELEC_REQUIRED_CR ? '#178c60' : 'var(--text)';
+  }
+  var state = loadState();
+  state.elecRows = [];
+  for (var j = 0; j < NUM_ELEC_ROWS; j++) {
+    var num  = document.getElementById('elec-' + j + '-num');
+    var name = document.getElementById('elec-' + j + '-name');
+    var crEl = document.getElementById('elec-' + j + '-cr');
+    var wic  = document.getElementById('elec-' + j + '-wic');
+    state.elecRows.push({
+      num:  num  ? num.value  : '',
+      name: name ? name.value : '',
+      cr:   crEl ? crEl.value : '',
+      wic:  wic  ? wic.classList.contains('checked') : false
+    });
+  }
+  localStorage.setItem(FILE_KEY, JSON.stringify(state));
+}
+function toggleWicStatic(i) {
+  var btn = document.getElementById('elec-' + i + '-wic');
+  if (!btn) return;
+  btn.classList.toggle('checked');
+  updateElecTotal();
+}
+function restoreElecRows(rows) {
+  if (!rows) return;
+  rows.forEach(function(row, i) {
+    if (i >= NUM_ELEC_ROWS) return;
+    var num  = document.getElementById('elec-' + i + '-num');
+    var name = document.getElementById('elec-' + i + '-name');
+    var cr   = document.getElementById('elec-' + i + '-cr');
+    var wic  = document.getElementById('elec-' + i + '-wic');
+    if (num)  num.value  = row.num  || '';
+    if (name) name.value = row.name || '';
+    if (cr)   cr.value   = row.cr   || '';
+    if (wic)  wic.classList.toggle('checked', !!row.wic);
+  });
+  updateElecTotal();
+}
+
+function updateProgress() {
+  var state = loadState();
+  var done = state.done || {};
+  var gbd  = state.gbd  || {};
+  var total = ALL_IDS.length;
+  var completed = ALL_IDS.filter(function(id) {
+    if (GBD_PREDONE.indexOf(id) !== -1) return gbd[id] !== false;
+    if (id.indexOf('gbd-') === 0) return !!gbd[id];
+    return !!done[id];
+  }).length;
+  var pct = total > 0 ? (completed / total * 100) : 0;
+  var fill  = document.getElementById('progress-fill');
+  var label = document.getElementById('progress-label');
+  if (fill)  fill.style.width = pct + '%';
+  if (label) label.textContent = completed + ' of ' + total + ' requirements completed';
+}
+
+function resetAll() {
+  if (!confirm('Clear all data for this advisee? This cannot be undone.')) return;
+  localStorage.removeItem(FILE_KEY);
+  location.reload();
+}
+
+var nameInput = document.getElementById('advisee-name');
+if (nameInput) {
+  nameInput.addEventListener('input', function() {
+    var state = loadState(); state.name = nameInput.value;
+    saveState(state); updateTitle();
+  });
+}
+function updateTitle() {
+  var name = (loadState().name || '').trim();
+  document.title = name ? name + ' — BIO Advising' : 'BS Biology — Advising Map';
+}
+function printMap() { window.print(); }
+
+// ── Save Advisee File ─────────────────────────────────────────────
+function saveAdviseeFile() {
+  var src = document.documentElement.outerHTML;
+  var nameEl = document.getElementById('advisee-name');
+  var nameVal = nameEl ? nameEl.value : '';
+  src = src.replace(
+    /(<input[^>]*id="advisee-name"[^>]*?)( value="[^"]*")?([^>]*>)/,
+    function(m,p1,p2,p3) { return p1 + ' value="' + escAttr(nameVal) + '"' + p3; }
+  );
+  for (var i = 0; i < NUM_ELEC_ROWS; i++) {
+    ['num','name','cr'].forEach(function(field) {
+      var el = document.getElementById('elec-' + i + '-' + field);
+      if (!el) return;
+      src = setInputValue(src, 'elec-' + i + '-' + field, el.value || '');
+    });
+    var wicBtn = document.getElementById('elec-' + i + '-wic');
+    if (wicBtn) src = setButtonClass(src, 'elec-' + i + '-wic', 'checked', wicBtn.classList.contains('checked'));
+  }
+  var gbdInputIds = GBD_INPUTS.map(function(p) { return p[1]; });
+  gbdInputIds.forEach(function(inputId) {
+    var el = document.getElementById(inputId);
+    if (!el) return;
+    src = setInputValue(src, inputId, el.value || '');
+  });
+  document.querySelectorAll('.card.done, .elec-card.done').forEach(function(card) {
+    var onclick = card.getAttribute('onclick') || '';
+    var m = onclick.match(/toggle\('([^']+)'\)/);
+    if (!m) return;
+    src = setCardDone(src, m[1], true);
+  });
+  document.querySelectorAll('.gbd-card.done').forEach(function(card) {
+    var id = card.id;
+    if (!id) return;
+    src = setGbdDone(src, id, true);
+  });
+  var name = nameVal.trim().replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_\-]/g,'') || 'advisee';
+  var filename = 'bio_' + name + '.html';
+  var blob = new Blob([src], { type: 'text/html;charset=utf-8' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+function setInputValue(src, id, val) {
+  var re = new RegExp('(<input[^>]*id="' + escRe(id) + '"[^>]*?)( value="[^"]*")?([^>]*>)', 'g');
+  return src.replace(re, function(m,p1,p2,p3) { return p1 + ' value="' + escAttr(val) + '"' + p3; });
+}
+function setButtonClass(src, id, cls, add) {
+  var re = new RegExp('(<[^>]*id="' + escRe(id) + '"[^>]*class=")([^"]*)"', 'g');
+  return src.replace(re, function(m,p1,classes) {
+    var list = classes.split(/\s+/).filter(function(c) { return c && c !== cls; });
+    if (add) list.push(cls);
+    return p1 + list.join(' ') + '"';
+  });
+}
+function setCardDone(src, toggleId, add) {
+  var re = new RegExp('(<div class=")(card|elec-card)("[^>]*onclick="toggle\(\'' + escRe(toggleId) + '\'\)")', 'g');
+  return src.replace(re, function(m,p1,type,p3) {
+    if (add && m.indexOf('done') === -1) return p1 + type + ' done' + p3;
+    return m;
+  });
+}
+function setGbdDone(src, id, add) {
+  var re = new RegExp('(<div class="gbd-card)([^"]*)"([^>]*id="' + escRe(id) + '")', 'g');
+  return src.replace(re, function(m,p1,classes,p3) {
+    if (add && classes.indexOf('done') === -1) return p1 + classes + ' done"' + p3;
+    if (!add) return p1 + classes.replace(/\s*done/g,'') + '"' + p3;
+    return m;
+  });
+}
+function escAttr(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escRe(s) {
+  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
+(function init() {
+  var state = loadState();
+  if (state.name && nameInput) { nameInput.value = state.name; updateTitle(); }
+  var done = state.done || {};
+  Object.keys(done).forEach(function(id) { if (done[id]) applyDone(id, true); });
+  var gbd = state.gbd || {};
+  GBD_PREDONE.forEach(function(id) {
+    var isDone = (id in gbd) ? gbd[id] : true;
+    applyGbd(id, isDone);
+    if (!(id in gbd)) gbd[id] = true;
+  });
+  Object.keys(gbd).forEach(function(id) {
+    if (GBD_PREDONE.indexOf(id) === -1 && gbd[id]) applyGbd(id, true);
+  });
+  var gbdInp = state.gbdInputs || {};
+  Object.keys(gbdInp).forEach(function(inputId) {
+    var el = document.getElementById(inputId);
+    if (el) el.value = gbdInp[inputId];
+  });
+  restoreElecRows(state.elecRows);
+  updateProgress();
+})();
+</script>
+</body>
+</html>
